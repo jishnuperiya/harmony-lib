@@ -15,4 +15,75 @@
 
 .*
 
+
+# CMake build directories
+build/
+build-*/
+cmake-build-*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+CTestTestfile.cmake
+install_manifest.txt
+compile_commands.json
+CMakeUserPresets.json
+CMakeOutput.log
+CMakeError.log
+
+# Executables and libraries
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.so.*
+*.dylib
+*.a
+*.lib
+
+# Object files
+*.o
+*.obj
+*.lo
+*.la
+
+# Debug / profiling files
+*.gch
+*.pch
+*.gcno
+*.gcda
+*.gcov
+*.prof
+*.dSYM/
+*.ipch
+
+# IDE / editor specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*.user
+*.workspace
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+
+# Generated test artifacts
+*.test
+*.tlog
+
 #*****************************************************************************
