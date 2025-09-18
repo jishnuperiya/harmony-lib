@@ -66,6 +66,13 @@ add_executable(jishnu-test
   test/main.cpp
   test/example.cpp)
 
+
+# Workaround for RapidCheck missing <cstdint> include
+if(TARGET rapidcheck)
+  target_compile_options(rapidcheck PRIVATE -include cstdint)
+endif()
+
+
 target_link_libraries(jishnu-test
   jishnu-lib
   rapidcheck
