@@ -8,21 +8,26 @@
 //*
 //*
 //****************************************************************************
-
-#include <iostream>                                      // For cout
-
-#include "complex.hpp"                                   // For example
-
+#pragma once
+#include <iostream>
 //****************************************************************************
 
-int main(int argc, const char* argv[])
+struct Complex
 {
-
-  Complex complex1{1 , 2};
-  Complex complex2{};
-  complex2 = complex1;
-  Complex complex3=complex1;
-  return 0;
-}
+  private:
+    double real;
+    double imag;
+  public:
+    //default constructor
+    Complex();
+    //non-default constructor
+    Complex(double, double);
+    //copy constructor
+    Complex(const Complex&);
+    //copy assignment operator
+    Complex& operator=(const Complex&);
+    //destructor
+    ~Complex();
+};
 
 //****************************************************************************
