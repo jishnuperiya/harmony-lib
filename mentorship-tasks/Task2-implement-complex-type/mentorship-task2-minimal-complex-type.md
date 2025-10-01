@@ -55,24 +55,14 @@
         
     - Copy assignment
         
-    - Move ctor
+    - Move ctor -> not explored in this task
         
-    - Move assignment
+    - Move assignment -> not explored in this task
         
     - Destructor
         
 - They form the _fundamental functionality_ of a class: construction, copy/move semantics, assignment, cleanup.
     
-- Rules:
-    
-    - **Rule of 0**: prefer no explicit SMFs when members handle themselves.
-        
-    - **Rule of 3**: traditionally, if you define copy ctor, copy assignment, or dtor, define all three.
-        
-    - **Rule of 5**: modern C++ — includes move ctor and move assignment.
-        
-    - **Rule of 6**: same as Rule of 5, but also counting the default ctor.
-        
 ---
 #### Default constructor
 
@@ -96,9 +86,9 @@
         
     - `Complex a{};` value-initializes → zeroes fundamentals and calls default ctors of members.
         
-- **Guideline**: prefer `= default` instead of writing an empty ctor; prefer `{}` initialization.
+- **Guideline**: prefer `= default` instead of writing an empty ctor; prefer `{}` initialization. (learned from cppcon talk)
     
-- **Trap**: avoid vexing parse — `Complex a();` declares a function, not an object.
+- **Trap**: avoid vexing parse — `Complex a();` declares a function, not an object. (learned from cppcon talk)
     
 
 ---
@@ -107,7 +97,7 @@
 
 - **Semantics**: cleans up object state at end of lifetime.
     
-- **When invoked**: scope exit, `delete`, container element removal.
+- **When invoked**: scope exit, `delete`
     
 - **Manual declaration**:
     
@@ -119,8 +109,7 @@
         
     - Generated dtor calls member dtors for class types; does nothing for fundamentals.
         
-- **Observation**:
-    
+**stuff learned in cppcon talk:**
     - For `std::string`, dtor releases memory automatically.
         
     - For raw pointers (`Resource*`), user must release resources manually.
@@ -140,7 +129,7 @@
         
     - Pass-by-value: `foo(b)`
         
-    - Return-by-value (if move not available).
+    - Return-by-value .
         
 - **Manual declaration**:
     
@@ -148,13 +137,13 @@
     
 - **Compiler behavior**:
     
-    - Generated if not declared, unless move operations exist or a member is non-copyable.
+    - Generated if not declared, unless move operations exist(learned from cppcon talk - didnt understand why..) or a member is non-copyable.
         
     - Performs memberwise copy (shallow for pointers).
         
 - **Observation**: distinct from assignment: it runs at object _creation_.
     
-- **Guideline**: provide explicit copy if shallow copy is unsafe (e.g. owning raw pointer).
+- **Guideline**: provide explicit copy if shallow copy is unsafe (e.g. owning raw pointer). -> learned from the cppcon talk
     
 
 ---
@@ -177,8 +166,6 @@
         
 - **Observation**:
     
-    - Must handle self-assignment safely.
-        
     - Different from copy ctor: works on an _already existing_ object.
         
 
@@ -189,5 +176,4 @@
 
 ---
 
-### Big Picture Takeaway
 
