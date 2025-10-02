@@ -45,7 +45,8 @@ add_compile_options(-Wall)
 
 add_library(jishnu-lib STATIC
   src/example.cpp
-  src/complex.cpp)
+  src/complex.cpp
+  src/string.cpp)
 
 target_link_libraries(jishnu-lib)
 
