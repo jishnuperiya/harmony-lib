@@ -9,14 +9,12 @@
 //*
 //****************************************************************************
 #pragma once
-#include <iostream>
 //****************************************************************************
 
 struct Complex
 {
   public:
-    Complex();
-    Complex(double, double);
+    Complex(double  = 0.0, double  = 0.0);
     Complex(const Complex&);
     Complex& operator=(const Complex&);
     ~Complex();

@@ -9,15 +9,15 @@
 //*
 //****************************************************************************
 
-#include <iostream>                                      // For cout
+#include <iostream>    // For cout
 
-#include "complex.hpp"                                   // For example
+#include "complex.hpp" // For complex                                
 
 //****************************************************************************
 
 
 // function taking Complex by value
-void takeByValue(Complex x)
+void takeByValue(const Complex& x)
 {
   std::cout << "Inside takeByValue()\n";
 }
@@ -25,8 +25,7 @@ void takeByValue(Complex x)
 // function returning Complex by value
 Complex makeComplex()
 {
-  Complex tmp(10.0, 20.0);
-  return tmp;
+  return Complex(10.0, 20.0);
 }
 
 int main(int argc, const char* argv[])
@@ -37,6 +36,9 @@ int main(int argc, const char* argv[])
 
   std::cout << "---- Non-default construction ----\n";
   Complex b(3.0, 4.0); // non-default ctor
+  Complex b2{3.0,4.0};  
+  Complex b3 = Complex(3.0,4.0);  
+  Complex b4 = Complex{3.0,4.0}; 
 
   std::cout << "---- Copy construction ----\n";
   Complex c = b; // copy ctor

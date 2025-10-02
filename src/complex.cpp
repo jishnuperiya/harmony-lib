@@ -10,18 +10,13 @@
 //****************************************************************************
 
 #include "complex.hpp"
+#include <iostream> // For std::cout
 
-
-Complex::Complex()
-  :real_{0.0}, imag_{0.0}
-{
-  std::cout << "Default constructor\n";
-}
 
 Complex::Complex(double real_, double imag_) 
   : real_{real_}, imag_{imag_}
 {
-  std::cout << "Non-default constructor\n";
+  std::cout << "Constructor\n";
 }
 
 Complex::Complex(const Complex& other)
@@ -34,7 +29,7 @@ Complex& Complex::operator=(const Complex& other)
 {
   std::cout << "Copy assignment\n";
   
-  if(this!=other)
+  if(this!=&other)
   {
     real_=other.real_;
     imag_=other.imag_;
