@@ -9,6 +9,7 @@
 //*
 //****************************************************************************
 #pragma once
+#include <cstddef>   // for std::size_t
 //****************************************************************************
 
 struct string
@@ -19,7 +20,7 @@ struct string
     string& operator=(const string&);
     ~string();
   private:
-    char* data_ = nullptr;;
+    char* data_ = nullptr;
     std::size_t length_ = 0;
 };
 
