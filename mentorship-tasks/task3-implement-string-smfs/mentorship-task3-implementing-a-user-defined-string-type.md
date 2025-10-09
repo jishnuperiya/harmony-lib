@@ -1,12 +1,12 @@
 - **Task Given:** Implement a user-defined string type with explicit **special member functions**.  
-- **Focus:**  
+- **Focus:**  Deep copy, ownership semantics, and resource safety.
 - **Date:** october 2025  
 
-**Goal:** Implement string type with explicit special member functions and understand how it differs form the previous complex type implementation (task2)
+**Goal:** Implement a custom string class that manages its own heap-allocated memory safely, understand how compiler-generated SMFs behave for pointer members, and see how this differs from the previous `Complex` (pure value type) implementation.
 
 ---
 
-## Exercise 1 – Value type experiment
+## Exercise 1 – Value type experiment (Shallow copy experiment)
 
 ### What I Did
 - Defined a minimal struct:
@@ -16,7 +16,7 @@ struct my_string {
 };
 ```
 
-- Passed onto a function (in the value-type-experiment branch) to observe the value behaviour:
+I tested copying, assigning, and passing this struct by value to see how the compiler-generated SMFs behave when a type owns a pointer.
 
 ```cpp
 using value = my_string;
@@ -27,29 +27,18 @@ void playing_with_value_type(value x, value y) {
     std::cout << "string 1 value is: " << x.data << '\n';
     std::cout << "string 2 value is: " << y.data << '\n';
 
-    // 1) Pass by value → invokes copy ctor (default)
-    do_nothing(x, y);
+    do_nothing(x, y);             // copy ctor (default)
+    x = y;                        // copy assignment (default)
+    value z = x;                  // copy construction (default)
 
-    // 2) Copy assignment operator (default)
-    x = y;
-    std::cout << "string 1 after x = y → " << x.data << '\n';
-
-    // 3) Copy construction (default)
-    value z = x;
-    std::cout << "z (copy of x) → " << z.data << '\n';
-
-    // 4) Show addresses of pointers
-    std::cout << "x.data address: " << static_cast<void*>(x.data) << '\n';
-    std::cout << "z.data address: " << static_cast<void*>(z.data) << '\n';
+    std::cout << "x.data: " << static_cast<void*>(x.data) << '\n';
+    std::cout << "z.data: " << static_cast<void*>(z.data) << '\n';
 }
+
 
 ```
 ---
-### What I Learned
-
-#### General
-
-the sample output looked like this:
+### What I Observed
 
 ```cpp
 string 1 value is: hello
@@ -58,41 +47,46 @@ string 1 after x = y → world
 z (copy of x) → world
 x.data address: 0x601fdeb70019
 z.data address: 0x601fdeb70019
+
 ```
 
-- The compiler generated special member functions 'kind of worked'. 
-- Copy constructor, Copy assignment operator etc seemed to work at first 
-- But there is small twist: To construct a data member (in a user-defined type), the constructor will do a bitwise copy. 
-- And in this case the  **data** member in the my_string struct is holding the value something like  **0x601fdeb70019** (which actually points to a character array in a contiguous block of memory). And the compiler just bitwise copy this value to the other object when you do the copy assignment or copy construction. 
-  
-for example, in this case:  
-  ```
-  value z = x;
-  ```
-the value z is an object of type my_string with a member which has value **0x601fdeb70019** and the value x is also an  object of type my_string with a member which has the same value **0x601fdeb70019** since the members were bitwise copied by the compiler.
+Both `x` and `z` ended up pointing to the same address — confirming that the compiler-generated SMFs performed **bitwise copies**.  
+The underlying characters weren’t duplicated, only the pointer value was copied.
 
-means it both points to the same contiguous block of memory. 
+### Insight
 
-**insight:**
-When the compiler-generated copy constructor or assignment operator runs, it just **copies this 8-byte pointer value** from one object to another. it doesn’t copy the actual characters.
+Default SMFs **“work”** only when members are true values.  
+For pointer members, they just copy the address, not the data-> causing aliasing.  
+Both objects now think they own the same heap block → **double-free risk** when destructors run.
 
+This experiment shows _why_ defining explicit SMFs is critical for resource-owning types
 
-## Exercise 2– Implementing explicit special member functions for my_string type
+## Exercise 2 – Implementing Explicit SMFs for `my_string`
 
-**Goal**: improve the previously defined my_string type such that, upon copying the object, the value itself is copied. not just the pointer
+**Goal**: Redesign the `string` class so that:
+
+- Each instance owns its **own heap block**.
+    
+- Copies duplicate the characters, not just the pointer.
+    
+- The destructor safely releases the owned block.
 
 ### What I Did
 
-- Defined a minimal struct:
 
 ```cpp
-struct my_string {
-    char* data;
-    unsigned long long size;
-};
-```
+struct string {
+    char* data_ = nullptr;
+    std::size_t length_ = 0;
 
--  implemented the constructor, copy ctor, copy assignment operator and the destructor
+public:
+    string(const char* s = "");             // param constructor
+    string(const string& other);            // copy ctor
+    string& operator=(const string& other); // copy assignment
+    ~string();                              // destructor
+};
+
+```
 
 ---
 
@@ -100,66 +94,109 @@ struct my_string {
 
 #### General
 
-- string literals are of type const char[]
-- string literals (and arrays) decays to pointer when passed to a function. 
-  `string b("hello");` -> the constructor is receiving a const char*
-- when you de-reference a null pointer, you get segfault error- so always check if the pointer is pointing to a valid memory location.
+- String literals are of type `const char[]` and decay to `const char*`.
+    
+- Always check for `nullptr` before dereferencing.
+    
+- `std::strcpy` is safer than `memcpy` for text since it also handles the null terminator.
+    
+- Prefer `std::size_t` over `unsigned long long` for size — it’s portable and matches the STL.
+
 ---
 
-### Default Constructor
+### Default / Parameterized Constructor
+```cpp
+string::string(const char* s) 
+{
+  length_ = std::strlen(s);
+  data_ = new char[length_ + 1];
+  std::strcpy(data_, s);
+}
+```
 
-- **Semantics**: creates an empty string object with `data_ = nullptr` and `length_ = 0`.
+- **Default argument:** `""` instead of `nullptr`, ensuring a valid empty string even when no argument is passed.
     
-- **When invoked**:  
-    `string a;`
+- **Steps:** measure length, allocate `length_ + 1`, copy content including `'\0'` (strcpy does that).
     
-- **Behavior**:
-    
-    - Initializes members safely to `nullptr` and `0`.
-        
-    - Prevents undefined behavior if object used before assignment.
+- **Why:** prevents crashes from dereferencing null pointers.
 
-### Parameterized Constructor (`const char*`)
+### Copy Constructor (Deep Copy)
 
-- **Semantics**: constructs a new string object from a C-style string.
+```cpp
+string::string(const string& other)
+  : string(other.data_) // constructor chaining (delegates to main ctor)
+{}
+```
+- **Semantics:** creates a deep copy.
     
-- **When invoked**:  
-    `string b("hello");`
-- **steps i did:**
-- Calls `my_strlen()` to measure the length.
-- Allocates new heap memory block (`new char[length_ + 1]`).
-- Copies characters using `memcpy` 
-- Appends null terminator (`'\0'`).
-learnings:
-- use memcpy to copy the contents the pointer points to. not the pointer
-- string literals are constant(thats why const char*)
-### Copy Constructor
-
-- **Semantics**: creates a new object as a copy of another
+- **Technique:** **constructor chaining (delegating constructor)** : instead of duplicating allocation/copy code, the copy constructor reuses the main constructor by passing `other.data_`.
     
-- **When invoked**:
-    - `string b = a;`
-    - Passing by value or returning by value.
-- **steps i did:**
-    1. Copies the length from `other`.
-    2. Allocates new memory on the heap.
-    3. Copies the content (`memcpy`).
-- **why is it needed**
-when you allow the compiler to generate a copy ctor for you, it does a bitwise copy and copies the pointer value for you. then you end up with 2 objects having same pointer value -> 2 objects pointing to same block of memory. what happens when you delete one object?
+- **Benefit:** avoids code duplication, improves maintainability.
+    
+- **Learning:** use initializer list to call another constructor of the same class.
 
 ### Copy Assignment Operator
+```cpp
+string& string::operator=(const string& other) 
+{
+    if (this != &other) {
+        delete[] data_;                // release existing memory
+        length_ = other.length_;
+        data_ = new char[length_ + 1];
+        std::strcpy(data_, other.data_);
+    }
+    return *this;
+}
 
-- **Semantics**: replaces the contents of an existing string with another string’s data.
+```
+
+- **Semantics:** replaces current content with a copy of `other`.
     
-- **When invoked**:  
-    `a = b;`
-- **steps i did**
-- pretty similar except you have to free up the existing data before copying
-- **why you need it?**
-- same reason as above
+- **Steps:**
+    
+    1. Check for self-assignment.
+        
+    2. Free old buffer.
+        
+    3. Allocate new block and copy text.
+        
+- **Mentor note:** prefer `std::strcpy` over `memcpy` for safety.
+    
+- this ensures that each string manages its own heap resource exclusively . no shared ownership.
 ### Destructor
+
+```cpp
+string::~string() 
+{
+  delete[] data_;
+}
+
+```
 - **Semantics**: releases heap-allocated memory when the object’s lifetime ends.
-- **When invoked**:
-    - Automatically at scope exit, or when `delete` is called(if you make the string object on heap)
-- **steps i did**
-- delete[] data_; -> since data_represents an array
+
+## Mentor Feedback Reflection
+
+Jonathan emphasized that while my explanation of _how_ SMFs work was accurate, the **core design issue** is _ownership_.
+```
+“When a class holds a pointer to a resource, the fundamental question is:  
+ Who owns the resource?”
+```
+
+In this string class:
+
+- Each instance **owns its own memory**.
+    
+- Copy operations **allocate new blocks** and copy data.
+    
+- The destructor **always deletes** its block.
+    
+- The assignment operator **guards against self-assignment**.
+## Final Takeaways
+
+- Compiler-generated SMFs are fine for _pure value types_, but not for _resource-owning types_.
+    
+- Always start by answering: **“Who owns the resource?”**
+    
+- Constructor chaining simplifies code and reduces maintenance burden.
+    
+- `std::size_t`, `""` defaults, and standard library functions (`std::strcpy`, `std::strlen`) make code safer and more idiomatic.
