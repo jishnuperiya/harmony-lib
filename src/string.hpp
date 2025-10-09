@@ -14,16 +14,15 @@
 struct string
 {  
   public:
-    string(const char* = nullptr);
+    string(const char* = "");
     string(const string&);
     string& operator=(const string&);
     ~string();
   private:
     char* data_ = nullptr;;
-    unsigned long long length_ = 0;
+    std::size_t length_ = 0;
 };
 
-unsigned long long my_strlen(const char* s);
 
 
 
