@@ -11,15 +11,22 @@
 
 #include <iostream>    // For cout
 
-#include "complex.hpp" // For complex                                
+#include "complex.hpp" // For complex
+#include "string.hpp" // For string                                 
 
 //****************************************************************************
 
 
-// function taking Complex by value
-void takeByValue(const Complex& x)
+// function taking Complex by reference
+void takeByReference(const Complex& x)
 {
   std::cout << "Inside takeByValue()\n";
+}
+
+// function taking string by reference
+void takeByReference(const string& x)
+{
+  std::cout << "Inside takeByReference()\n";
 }
 
 // function returning Complex by value
@@ -28,32 +35,40 @@ Complex makeComplex()
   return Complex(10.0, 20.0);
 }
 
+// function returning string by value
+string makeString()
+{
+  return string{"returned_string"};
+}
 int main(int argc, const char* argv[])
 {
 
   std::cout << "---- Default construction ----\n";
-  Complex a; // default ctor
+  string a; // default ctor
 
   std::cout << "---- Non-default construction ----\n";
-  Complex b(3.0, 4.0); // non-default ctor
-  Complex b2{3.0,4.0};  
-  Complex b3 = Complex(3.0,4.0);  
-  Complex b4 = Complex{3.0,4.0}; 
+  string b("hello"); // non-default ctor
+  string b2{"hello"};  
+  string b3 = string("hello");  
+  string b4 = string{"hello"};
+
 
   std::cout << "---- Copy construction ----\n";
-  Complex c = b; // copy ctor
+  string c = a; // copy ctor
 
   std::cout << "---- Copy assignment ----\n";
   a = b; // copy assignment
 
   std::cout << "---- Pass by value ----\n";
-  takeByValue(b); // copy ctor (to make parameter x)
+  takeByReference(b); // copy ctor (to make parameter x)
 
   std::cout << "---- Return by value ----\n";
-  Complex d = makeComplex(); // copy ctor
+  string d = makeString(); // copy ctor
 
   std::cout << "---- End of main ----\n";
   return 0;
 }
+
+
 
 //****************************************************************************
