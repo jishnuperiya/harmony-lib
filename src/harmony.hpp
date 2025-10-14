@@ -36,7 +36,7 @@ namespace harmony {
     Pitch& operator-=(int semitones);
 
   private:
-    int midi_note_;  // 0–127
+    int midi_note_ = 0;  // 0–127
 
   };
 
@@ -74,7 +74,7 @@ namespace harmony {
     Frequency& operator-=(double delta_hz);
 
   private:
-    double hz_; 
+    double hz_ = 0.0; 
   };
 
   // ---Non-member functions---
@@ -95,8 +95,8 @@ namespace harmony {
   {
   public:
     // ---Special Member Functions---
-    Note(Pitch p);
-    Note(Frequency f);
+    Note(Pitch p = 60);
+    Note(Frequency f = 440.0);
     Note(const Note& other);
     Note& operator=(const Note& other);
     ~Note();
@@ -109,8 +109,8 @@ namespace harmony {
     Note& transpose(int semitones); 
 
   private:
-    Pitch pitch_;
-    Frequency frequency_;
+    Pitch pitch_ = 60;
+    Frequency frequency_ =440.0;
   };
 
   // ---Non-member functions---
