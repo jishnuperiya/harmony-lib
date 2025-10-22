@@ -98,3 +98,22 @@ We will build a **C++ harmony library**.
 - Implement the **first three classes only** for now.
     
 - Think about **value semantics** and safe memory handling for your classes.
+
+
+
+
+### Visual intiuition midi keys
+
+```
+MIDI 0   → C−1
+...
+MIDI 21  → A0 (lowest piano key)
+...
+MIDI 60  → C4 (middle C)
+...
+MIDI 108 → C8 (highest piano key)
+...
+MIDI 127 → G9
+
+```
+
