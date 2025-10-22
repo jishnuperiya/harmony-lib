@@ -16,6 +16,9 @@
 
 namespace harmony {
 
+  class frequency;
+  class pitch;
+  class note;
   // -------------------
   // pitch Class
   // -------------------
@@ -26,8 +29,8 @@ namespace harmony {
     pitch(int midi_note = 60);
 
     // ---Accessors---
-    int midi();
-    double frequency();
+    int get_midi() const;
+    frequency get_frequency() const;
 
     // ---Mutating member operators---
     pitch& operator+=(int semitones);
@@ -43,14 +46,14 @@ namespace harmony {
   // Arithmetic Operators
   pitch operator+(pitch lhs, int semitones);
   pitch operator-(pitch lhs, int semitones);
-  pitch operator-(pitch lhs, pitch rhs);
+  int operator-(pitch lhs, pitch rhs);
 
   // Utitlity Functions
   bool is_octave_equivalent(pitch lhs, pitch rhs);
 
   // Scientific pitch Notation accessors
-  std::string name(pitch p);
   uint8_t octave(pitch p);
+  std::string name(pitch p);
 
   // -------------------
   // Frequency Class
@@ -63,14 +66,15 @@ namespace harmony {
     frequency(double hz = 440.0);
 
     // ---Accessors---
-    double hz();
+    double hz() const;
+    uint8_t midi() const;
 
     // ---Mutating Member Operators---
     frequency& operator+=(double delta_hz);
     frequency& operator-=(double delta_hz);
 
   private:
-    double hz_ = 0.0; 
+    double hz_ = 440.0; 
   };
 
   // ---Non-member functions---
