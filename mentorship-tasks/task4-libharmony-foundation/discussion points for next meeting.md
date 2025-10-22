@@ -1,0 +1,3 @@
+- Reminder: discuss `const` and const member functions
+- ostream operator
+- 
