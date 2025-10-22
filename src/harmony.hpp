@@ -10,112 +10,107 @@
 //****************************************************************************
 #pragma once
 #include <string> //For std::string
+#include <cstdint> //For uint8_t
 //****************************************************************************
 
 
 namespace harmony {
 
+  class frequency;
+  class pitch;
+  class note;
   // -------------------
-  // Pitch Class
+  // pitch Class
   // -------------------
-  struct Pitch 
+  class pitch 
   {
   public:
     // ---Special Member Functions ---
-    Pitch(int midi_note = 0); 
-    Pitch(const Pitch& other);
-    Pitch& operator=(const Pitch& other);
-    ~Pitch();
+    pitch(int midi_note = 60);
 
     // ---Accessors---
-    int midi();
-    double frequency();
+    int get_midi() const;
+    frequency get_frequency() const;
 
     // ---Mutating member operators---
-    Pitch& operator+=(int semitones);
-    Pitch& operator-=(int semitones);
+    pitch& operator+=(int semitones);
+    pitch& operator-=(int semitones);
 
   private:
-    int midi_note_ = 0;  // 0–127
+    uint8_t midi_note_ = 60;  // 0–127
 
   };
 
   //---Non member functions---
     
   // Arithmetic Operators
-  Pitch operator+(Pitch lhs, int semitones);
-  Pitch operator-(Pitch lhs, int semitones);
+  pitch operator+(pitch lhs, int semitones);
+  pitch operator-(pitch lhs, int semitones);
+  int operator-(pitch lhs, pitch rhs);
 
   // Utitlity Functions
-  bool is_octave_equivalent(const Pitch& lhs, const Pitch& rhs);
+  bool is_octave_equivalent(pitch lhs, pitch rhs);
 
-  // Scientific Pitch Notation accessors
-  std::string name(const Pitch& p);
-  int octave(const Pitch& p);
+  // Scientific pitch Notation accessors
+  uint8_t octave(pitch p);
+  std::string name(pitch p);
 
   // -------------------
   // Frequency Class
   // -------------------
 
-  struct Frequency 
+  class frequency 
   {
   public:
     // ---Special Member Functions---
-    Frequency(double hz = 0.0);
-    Frequency(const Frequency& other);
-    Frequency& operator=(const Frequency& other);
-    ~Frequency();
+    frequency(double hz = 440.0);
 
     // ---Accessors---
-    double hz();
+    double hz() const;
+    uint8_t midi() const;
 
     // ---Mutating Member Operators---
-    Frequency& operator+=(double delta_hz);
-    Frequency& operator-=(double delta_hz);
+    frequency& operator+=(double delta_hz);
+    frequency& operator-=(double delta_hz);
 
   private:
-    double hz_ = 0.0; 
+    double hz_ = 440.0; 
   };
 
   // ---Non-member functions---
 
   // Arithmetic Operators
-  Frequency operator+(Frequency lhs, double delta_hz);
-  Frequency operator-(Frequency lhs, double delta_hz);
-  Frequency operator*(Frequency lhs, double factor);
-  Frequency operator/(Frequency lhs, double divisor);
+  frequency operator*(frequency lhs, double factor);
+  frequency operator/(frequency lhs, double divisor);
 
   // Utitlity Functions
-  bool is_octave_equivalent(const Frequency& lhs, const Frequency& rhs);
+  bool is_octave_equivalent(frequency lhs, frequency rhs);
 
   // -------------------
   // Note Class
   // -------------------
-  struct Note 
+  class note 
   {
   public:
     // ---Special Member Functions---
-    Note(Pitch p = 60);
-    Note(Frequency f = 440.0);
-    Note(const Note& other);
-    Note& operator=(const Note& other);
-    ~Note();
+    note(pitch p = 60);
+    note(frequency f = 440);
 
     // ---Accessors---
-    Pitch pitch();
-    Frequency frequency();
+    pitch get_pitch();
+    frequency get_frequency();
 
     // ---Mutating member operators---
-    Note& transpose(int semitones); 
+    note& transpose(int semitones); 
 
   private:
-    Pitch pitch_ = 60;
-    Frequency frequency_ =440.0;
+    pitch pitch_;
+    frequency freq_;
   };
 
   // ---Non-member functions---
-  Note operator+(Note n, int semitones); // transpose copy
-  int interval_in_semitones(const Note& lhs, const Note& rhs);
-  bool is_octave_equivalent(const Note& lhs, const Note& rhs);
+  note operator+(note n, int semitones); // transpose copy
+  int interval_in_semitones( note lhs,  note rhs);
+  bool is_octave_equivalent( note lhs,  note rhs);
 
 } // namespace harmony
