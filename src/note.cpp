@@ -48,3 +48,9 @@ bool harmony::is_octave_equivalent(note lhs, note rhs)
   return diff % 12 == 0;
 }
 
+std::ostream& harmony::operator<<(std::ostream& os, harmony::note n)
+{
+   os << "Note{" << harmony::name(n.get_pitch()) << ", "
+      << n.get_frequency().hz() << " Hz}";
+   return os;
+}

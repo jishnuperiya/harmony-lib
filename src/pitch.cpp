@@ -74,3 +74,9 @@ std::string harmony::name(harmony::pitch p)
   std::string scientific_notation = note_name + std::to_string(harmony::octave(p));
   return scientific_notation;
 }
+
+std::ostream& harmony::operator<<(std::ostream& os, harmony::pitch p)
+{
+    os << "Pitch{" << p.get_midi() << " " << harmony::name(p) << "}";
+    return os;
+}

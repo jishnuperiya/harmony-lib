@@ -58,3 +58,9 @@ bool harmony::is_octave_equivalent(frequency lhs, frequency rhs)
   // Check if 'freq_ratio' is effectively an integer.
   return std::fabs(freq_ratio - std::round(freq_ratio)) < 1e-9;
 }
+
+std::ostream& harmony::operator<<(std::ostream& os, harmony::frequency f)
+{
+   os << "Frequency{" << f.hz() << " Hz}";
+   return os;
+}

@@ -74,11 +74,8 @@ int main(int argc, const char* argv[])
   note n1(pitch(60)); // C4
   note n2 = n1 + 12;  // transpose by one otcave
 
-  std::cout << "n1 pitch: " << name(n1.get_pitch())
-            << ", freq = " << n1.get_frequency().hz() << " Hz"<< std::endl;;
-  std::cout << "n2 pitch: " << name(n2.get_pitch())
-            << ", freq = " << n2.get_frequency().hz() << " Hz"<< std::endl;;
-
+  std::cout << n1 << "\n" << n2 << std::endl;
+  
   std::cout << "Interval (n2 - n1): " << interval_in_semitones(n2, n1) << " semitones"<< std::endl;;
   std::cout << "Are n1 and n2 octave equivalent? "
             << std::boolalpha << is_octave_equivalent(n1, n2) << std::endl;;

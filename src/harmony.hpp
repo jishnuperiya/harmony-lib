@@ -11,6 +11,7 @@
 #pragma once
 #include <string> //For std::string
 #include <cstdint> //For uint8_t
+#include <ostream> //For std::ostream
 //****************************************************************************
 
 
@@ -50,6 +51,7 @@ namespace harmony {
 
   // Utitlity Functions
   bool is_octave_equivalent(pitch lhs, pitch rhs);
+  std::ostream& operator<<(std::ostream& os, pitch p);
 
   // Scientific pitch Notation accessors
   uint8_t octave(pitch p);
@@ -85,6 +87,7 @@ namespace harmony {
 
   // Utitlity Functions
   bool is_octave_equivalent(frequency lhs, frequency rhs);
+  std::ostream& operator<<(std::ostream& os, frequency f);
 
   // -------------------
   // Note Class
@@ -112,5 +115,6 @@ namespace harmony {
   note operator+(note n, int semitones); // transpose copy
   int interval_in_semitones( note lhs,  note rhs);
   bool is_octave_equivalent( note lhs,  note rhs);
+  std::ostream& operator<<(std::ostream& os, note n);
 
 } // namespace harmony
