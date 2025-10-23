@@ -46,7 +46,7 @@ harmony::frequency harmony::operator*(harmony::frequency lhs,double factor)
   return harmony::frequency(lhs.hz()*factor);
 }
 
-harmony::frequency operator/(harmony::frequency lhs,double factor)
+harmony::frequency harmony::operator/(harmony::frequency lhs,double factor)
 {
   return harmony::frequency(lhs.hz()/factor);  
 }

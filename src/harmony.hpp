@@ -30,7 +30,7 @@ namespace harmony {
     pitch(int midi_note = 60);
 
     // ---Accessors---
-    int get_midi() const;
+    uint8_t get_midi() const;
     frequency get_frequency() const;
 
     // ---Mutating member operators---

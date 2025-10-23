@@ -12,7 +12,7 @@ harmony::pitch::pitch(int midi_note)
   }
 }
 
-int harmony::pitch::get_midi() const
+uint8_t harmony::pitch::get_midi() const
 {
   return midi_note_;
 }
@@ -37,13 +37,13 @@ harmony::pitch& harmony::pitch::operator-=(int semitones)
   return *this;        
 }
 
-harmony::pitch operator+(harmony::pitch lhs, int semitones) 
+harmony::pitch harmony::operator+(harmony::pitch lhs, int semitones) 
 {
   lhs+=semitones;
   return lhs; 
 }
 
-harmony::pitch operator-(harmony::pitch lhs, int semitones)
+harmony::pitch harmony::operator-(harmony::pitch lhs, int semitones)
 {
   lhs-=semitones;
   return lhs; 
