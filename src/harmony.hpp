@@ -28,11 +28,11 @@ namespace harmony {
   public:
     // ---Special Member Functions ---
     pitch(int midi_note = 60);
-
+//  pitch(frequency);bfreq class could have a fn called get pitch Or calclualtion here 
     // ---Accessors---
     uint8_t get_midi() const;
     frequency get_frequency() const;
-
+    note get_note() const;
     // ---Mutating member operators---
     pitch& operator+=(int semitones);
     pitch& operator-=(int semitones);
@@ -54,7 +54,7 @@ namespace harmony {
   std::ostream& operator<<(std::ostream& os, pitch p);
 
   // Scientific pitch Notation accessors
-  uint8_t octave(pitch p);
+  uint8_t octave(pitch p); //get oct
   std::string name(pitch p);
 
   // -------------------
@@ -69,11 +69,12 @@ namespace harmony {
 
     // ---Accessors---
     double hz() const;
-    uint8_t midi() const;
+    uint8_t midi() const; // better: nearest pitch
 
     // ---Mutating Member Operators---
     frequency& operator+=(double delta_hz);
     frequency& operator-=(double delta_hz);
+    //*= and /= better than + -
 
   private:
     double hz_ = 440.0; 
@@ -96,8 +97,9 @@ namespace harmony {
   {
   public:
     // ---Special Member Functions---
-    note(pitch p = 60);
-    note(frequency f = 440);
+    note(uint8_t);
+    //(pitch p = 60);
+    //note(frequency f = 440);
 
     // ---Accessors---
     pitch get_pitch();
@@ -105,10 +107,9 @@ namespace harmony {
 
     // ---Mutating member operators---
     note& transpose(int semitones); 
-
+    note& operator+=(int);
   private:
-    pitch pitch_;
-    frequency freq_;
+    uint8_t note_; // 0 -11
   };
 
   // ---Non-member functions---
