@@ -1,14 +1,3 @@
-
-ostream (abstraction)
-   ↓ holds pointer to
-streambuf (implementation interface)
-   ↓ derived types implement actual sinks
-   ├── consolebuf (writes to console)
-   └── filebuf    (writes to file)
-
-## Things I learned:
-
-
 ### Handles in C++
 the `filebuf` class has a data member : `FILE* file_`
 
