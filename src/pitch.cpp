@@ -39,8 +39,8 @@ harmony::pitch& harmony::pitch::operator-=(int semitones)
 
 harmony::pitch harmony::operator+(harmony::pitch lhs, int semitones) 
 {
-  lhs+=semitones;
-  return lhs; 
+  
+  return lhs+=semitones;
 }
 
 harmony::pitch harmony::operator-(harmony::pitch lhs, int semitones)
@@ -77,6 +77,6 @@ std::string harmony::name(harmony::pitch p)
 
 std::ostream& harmony::operator<<(std::ostream& os, harmony::pitch p)
 {
-    os << "Pitch{" << p.get_midi() << " " << harmony::name(p) << "}";
+    os << "Pitch{" << p.get_midi() << " " << harmony::name(p) << "}"; //workout name and octave and stream directily the scientific notation
     return os;
 }
