@@ -69,5 +69,25 @@ public:
 };
 
 
+//---Sample usage in main() -------
+
+/*
+
+int main()
+{
+  my_filebuf fbuf("test.txt");
+  my_consolebuf cbuf;
+
+  my_ostream console_output(&cbuf); //create an ostream object that uses consolebuf
+  my_ostream file_output(&fbuf); //create an ostream object that uses filebuf
+
+  console_output << 'A' << 'B'; //output character 'A' to the console
+  //which is essentially equivalent to:
+  console_output.operator<<('A').operator<<('B'); //operator overloading is actually a function with infix notation sugar
+
+  return 0;
+}
+
+*/
 
 //****************************************************************************
