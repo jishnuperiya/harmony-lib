@@ -12,14 +12,24 @@ The main objective was to play around with the ostream class and streambuf class
 
 
 **ios original design**
-          ios
-           │
-      ┌────┴────┐
-   istream   ostream
-           │
-      streambuf
-           │
-        filebuf, stringbuf, etc.
+
+ios
+|
+ostream -> streambuf
+			|
+		   filebuf
+
+- `ostream` IS an ios (inheritance), whereas `ostream` HAS a `streambuf`(delegation via a pointer - the 'bridge')
+
+|Concept|Relationship Type|Example|Meaning|
+|---|---|---|---|
+|`ostream` **IS** an `ios`|**Inheritance (is-a)**|`class ostream : public ios { ... };`|`ostream` inherits functionality from `ios`, so it _is a specialized form_ of it.|
+|`ostream` **HAS** a `streambuf`|**Composition / Delegation (has-a)**|`streambuf* m_buf;` inside `ostream`|The `ostream` _contains_ a `streambuf` pointer and delegates the actual I/O operations to it (that’s the Bridge pattern).|
+
+how to distinguish visually?
+
+- inheritance( IS-A) : solid line with triangle arrow in UML
+- Delegation/composition (HAS-A) : line with diamond or plain arrow
 
 
 ## conceptual overview

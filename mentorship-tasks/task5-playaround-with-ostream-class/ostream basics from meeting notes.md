@@ -244,15 +244,11 @@ Stroustrup replaced `printf` with a **stream abstraction** that respects C++’s
 architecture:
 
 ```bash
-          ios
-           │
-      ┌────┴────┐
-   istream   ostream
-           │
-      streambuf
-           │
-        filebuf, stringbuf, etc.
-
+ios
+|
+ostream -> streambuf
+			|
+		   filebuf
 ```
 Each layer has a **responsibility boundary** — and that’s the exact _Bridge pattern_ idea you noted.
 
