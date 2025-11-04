@@ -2,35 +2,42 @@
 #include <cassert> //for assert
 #include <cmath> //for fabs
 #include <stdexcept> //for std::inalid_argument
+#include <array> //for std::array
 
-harmony::note::note(pitch p)
-  :pitch_{p}, freq_{p.get_frequency()}
-{
+std::array<const char*, 12> note_names = {
+  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+};
+
+
+harmony::note::note(uint8_t value)
+  : note_{static_cast<uint8_t>(value % 12)} 
+{}
+
+uint8_t harmony::note::value() const {
+  return note_;
 }
 
-harmony::note::note(frequency f)
-  :freq_{f}, pitch_{f.midi()}
+std::string harmony::note::name() const
 {
+  return note_names[note_];
 }
 
-harmony::pitch harmony::note::get_pitch()
-{
-  return pitch_;
+harmony::pitch harmony::note::get_pitch(int octave) const {
+  int midi_val = (octave + 1) * 12 + note_;
+  return pitch(midi_val);
 }
 
-harmony::frequency harmony::note::get_frequency()
-{
-  return freq_;
+harmony::frequency harmony::note::get_frequency(int octave) const {
+  return get_pitch(octave).get_frequency();
 }
 
 harmony::note& harmony::note::transpose(int semitones)
 {
-  pitch_+=semitones;
-  double new_hz = freq_.hz() * std::pow(2.0, semitones / 12.0);
-  freq_=harmony::frequency{new_hz};
+  int new_val = static_cast<int>(note_) + semitones;
+  new_val = ((new_val % 12) + 12) % 12; // proper wrap for negatives
+  note_ = static_cast<uint8_t>(new_val);
   return *this;
 }
-
 harmony::note harmony::operator+(harmony::note n, int semitones)
 {
   n.transpose(semitones);
@@ -39,76 +46,16 @@ harmony::note harmony::operator+(harmony::note n, int semitones)
 
 int harmony::interval_in_semitones(note lhs, note rhs)
 {
-  return lhs.get_pitch().get_midi() - rhs.get_pitch().get_midi();
+  return ((int)lhs.value() - (int)rhs.value() + 12) % 12;
 }
 
 bool harmony::is_octave_equivalent(note lhs, note rhs)
 {
-  int diff = std::abs(lhs.get_pitch().get_midi() - rhs.get_pitch().get_midi());
-  return diff % 12 == 0;
+  return lhs.value() == rhs.value();
 }
-std::ostream& harmony::operator<<(std::ostream&os, harmony::frequency f);
-std::ostream& harmony::operator<<(std::ostream& os, harmony::note n)
+
+std::ostream& harmony::operator<<(std::ostream& os, note n)
 {
-   return os << "Note{" 
-      << n.get_pitch() << ", "
-      << n.get_frequency();
+  os << "Note{" << n.name() << "}";
+  return os;
 }
-// printf("pitch {%d}" , 72.05) //casting - garbage int... printf-variadic-not typesafe.
-/*
-
-not tpysafe
-not extensible
-
-void print(pitch );
-
-void print(note);
-
-function overlaoind 
-
-stream insertion - chaining - possible because
-
-operator<<((operator<<(os, "Note{")) , harmony::name(n.get_pitch()))
-
-ios
-|
-ostream -> streambuf
-               |
-            filebuf
-
-            bridge design pattern
-
-struct streambuf
-{
-  virtual void put_char(char)=0;
-  virtual void put_char(cost char*, size_t)=0;
-}
-
-struct filebuf : streambuf
-{
-  filebuf(const char* filename);
-  ~filebuf(); // close the filehandle
-  void put_char(char) override;
-  private:
-    int m_filehandle;
-}
-
-//diff strem buf diff destinations. 
-struct ostream
-{
-  private:
-    streambuf* m_buf;
-  public:
-    void insert(char)
-    {
-      m_buf->put_char(c);
-    }
-    void insert(const char*)
-    void insert(int i)
-    {
-      for each digit of i convert to char and send it to stream buf
-      possibly a enum for format of int: oct, hex 
-    }
-    void insert(dobule);
-}
-*/

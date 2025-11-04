@@ -39,7 +39,6 @@ namespace harmony {
 
   private:
     uint8_t midi_note_ = 60;  // 0–127
-
   };
 
   //---Non member functions---
@@ -60,7 +59,6 @@ namespace harmony {
   // -------------------
   // Frequency Class
   // -------------------
-
   class frequency 
   {
   public:
@@ -69,7 +67,8 @@ namespace harmony {
 
     // ---Accessors---
     double hz() const;
-    uint8_t midi() const; // better: nearest pitch
+    uint8_t midi() const; 
+    pitch get_pitch() const;
 
     // ---Mutating Member Operators---
     frequency& operator+=(double delta_hz);
@@ -97,13 +96,13 @@ namespace harmony {
   {
   public:
     // ---Special Member Functions---
-    note(uint8_t);
-    //(pitch p = 60);
-    //note(frequency f = 440);
-
+    note(uint8_t value=0);
+    
     // ---Accessors---
-    pitch get_pitch();
-    frequency get_frequency();
+    uint8_t value() const;
+    std::string name() const;
+    pitch get_pitch(int octave) const;
+    frequency get_frequency(int octave) const;
 
     // ---Mutating member operators---
     note& transpose(int semitones); 

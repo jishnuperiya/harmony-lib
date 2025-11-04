@@ -71,7 +71,7 @@ int main(int argc, const char* argv[])
             << std::boolalpha <<is_octave_equivalent(f1, f2) << std::endl;
 
   // ---- Test note ----
-  note n1(pitch(60)); // C4
+  note n1(0); 
   note n2 = n1 + 12;  // transpose by one otcave
 
   std::cout << n1 << "\n" << n2 << std::endl;

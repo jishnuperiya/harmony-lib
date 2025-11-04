@@ -21,6 +21,15 @@ uint8_t harmony::frequency::midi() const
 {
   return static_cast<uint8_t>(std::round(69 + 12 * std::log2(hz_ / 440.0)));
 }
+
+harmony::pitch harmony::frequency::get_pitch() const
+{
+  // Convert to nearest MIDI note number.
+  int midi_val = static_cast<int>(std::round(69 + 12 * std::log2(hz_ / 440.0)));
+
+  return pitch(midi_val);
+}
+
 harmony::frequency& harmony::frequency::operator+=(double delta_hz)
 {
   hz_+=delta_hz;

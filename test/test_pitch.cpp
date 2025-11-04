@@ -4,6 +4,25 @@
 
 using namespace harmony;
 
+//open a filebuf
+/*
+create file buf
+ostream helding on to that gilebuf
+
+ofstream subclass
+
+write pitch or note to the ofstream
+
+since ofstream is ostream it can be apssed to <<
+
+
+----
+
+instead of ofstream use cout.
+different streambuffers.
+
+
+*/
 
 TEST_CASE("frequency construction and accessors")
 {  
