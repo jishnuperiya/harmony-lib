@@ -29,7 +29,7 @@ project(jishnu
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-find_package(Doxygen    1.9.8  REQUIRED)
+#find_package(Doxygen    1.9.8  REQUIRED)
 find_package(DocTest    2.4.11 REQUIRED)
 find_package(RapidCheck        REQUIRED)
 
@@ -69,9 +69,15 @@ add_executable(jishnu-test
   test/example.cpp)
 
 
-# Workaround for RapidCheck missing <cstdint> include
+# --------------------------------------------------------------------
+# Workaround for RapidCheck missing <cstdint> include (MSVC + GCC/Clang)
+# --------------------------------------------------------------------
 if(TARGET rapidcheck)
-  target_compile_options(rapidcheck PRIVATE -include cstdint)
+  if(MSVC)
+    target_compile_options(rapidcheck PRIVATE /FIcstdint)
+  else()
+    target_compile_options(rapidcheck PRIVATE -include cstdint)
+  endif()
 endif()
 
 
