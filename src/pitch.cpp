@@ -68,7 +68,7 @@ uint8_t harmony::octave(harmony::pitch p)
 
 std::string harmony::name(harmony::pitch p)
 {
-  char* note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+  const char* note_names[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
   int note_idx = p.get_midi() % 12;
   std::string note_name = note_names[note_idx];
   std::string scientific_notation = note_name + std::to_string(harmony::octave(p));
@@ -77,6 +77,6 @@ std::string harmony::name(harmony::pitch p)
 
 std::ostream& harmony::operator<<(std::ostream& os, harmony::pitch p)
 {
-    os << "Pitch{" << p.get_midi() << " " << harmony::name(p) << "}"; //workout name and octave and stream directily the scientific notation
+    os << harmony::name(p); 
     return os;
 }

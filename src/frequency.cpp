@@ -70,6 +70,6 @@ bool harmony::is_octave_equivalent(frequency lhs, frequency rhs)
 
 std::ostream& harmony::operator<<(std::ostream& os, harmony::frequency f)
 {
-   os << "Frequency{" << f.hz() << " Hz}";
+   os << f.hz();
    return os;
 }

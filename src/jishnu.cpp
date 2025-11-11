@@ -12,9 +12,15 @@
 #include <iostream>    // For cout
 
 #include "complex.hpp" // For complex
+<<<<<<< Updated upstream
+#include "string.hpp" // For string                                 
+
+=======
 #include "string.hpp" // For string
 #include "harmony.hpp" // For pitch, frequency and note                                 
-
+#include "chord.hpp" // For harmony::chord
+#include "progression.hpp"// For harmony::chord_progression
+>>>>>>> Stashed changes
 //****************************************************************************
 
 
@@ -44,8 +50,42 @@ string makeString()
 int main(int argc, const char* argv[])
 {
 
+<<<<<<< Updated upstream
+=======
   using namespace harmony;
 
+  // -----Test chord---
+  //chord cmin(note(0), chord_quality::Minor);
+
+  //std::cout << cmin << std::endl;
+
+  //8
+
+  //for (auto p : cmin.get_pitches(5))
+  //{
+  //    std::cout << p << " ";
+  //}
+
+  //---Test chord progression---
+
+  chord_progression progression_251;
+  progression_251.add(chord(note(2), chord_quality::Minor));
+  progression_251.add(chord(note(7), chord_quality::Major));
+  progression_251.add(chord(note(0), chord_quality::Major));
+
+  
+  std::cout << progression_251 << std::endl;
+
+  for (auto c : progression_251.chords())
+  {
+      for (auto p : c.get_pitches())
+      {
+          std::cout << p << " ";
+      }
+      std::cout << "\n";
+  }
+
+  
   // -----Test pitch-----
   pitch middle_c{60};
   pitch a4(69);
@@ -83,6 +123,7 @@ int main(int argc, const char* argv[])
   // -------------------------------------------
 
 
+>>>>>>> Stashed changes
   std::cout << "---- Default construction ----\n";
   string a; // default ctor
 

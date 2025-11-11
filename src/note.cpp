@@ -22,19 +22,21 @@ std::string harmony::note::name() const
   return note_names[note_];
 }
 
-harmony::pitch harmony::note::get_pitch(int octave) const {
+harmony::pitch harmony::note::get_pitch(int octave) const 
+{
   int midi_val = (octave + 1) * 12 + note_;
   return pitch(midi_val);
 }
 
-harmony::frequency harmony::note::get_frequency(int octave) const {
+harmony::frequency harmony::note::get_frequency(int octave) const 
+{
   return get_pitch(octave).get_frequency();
 }
 
 harmony::note& harmony::note::transpose(int semitones)
 {
   int new_val = static_cast<int>(note_) + semitones;
-  new_val = ((new_val % 12) + 12) % 12; // proper wrap for negatives
+  new_val = ((new_val % 12) + 12) % 12; // proper wrapping for negatives
   note_ = static_cast<uint8_t>(new_val);
   return *this;
 }
