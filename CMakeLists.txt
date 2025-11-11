@@ -46,7 +46,10 @@ add_compile_options(-Wall)
 add_library(jishnu-lib STATIC
   src/example.cpp
   src/complex.cpp
-  src/string.cpp)
+  src/string.cpp
+  src/pitch.cpp
+  src/frequency.cpp
+  src/note.cpp)
 
 target_link_libraries(jishnu-lib)
 
@@ -66,7 +69,10 @@ target_link_libraries(jishnu
 
 add_executable(jishnu-test
   test/main.cpp
-  test/example.cpp)
+  test/example.cpp
+  test/test_pitch.cpp
+  test/test_frequency.cpp
+  test/test_note.cpp)
 
 
 # Workaround for RapidCheck missing <cstdint> include
