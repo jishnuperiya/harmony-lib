@@ -12,15 +12,13 @@
 #include <iostream>    // For cout
 
 #include "complex.hpp" // For complex
-<<<<<<< Updated upstream
 #include "string.hpp" // For string                                 
-
-=======
 #include "string.hpp" // For string
 #include "harmony.hpp" // For pitch, frequency and note                                 
 #include "chord.hpp" // For harmony::chord
 #include "progression.hpp"// For harmony::chord_progression
->>>>>>> Stashed changes
+#include "voicer.hpp" // For generate_voicings
+#include <array>    // For std::array
 //****************************************************************************
 
 
@@ -49,53 +47,47 @@ string makeString()
 }
 int main(int argc, const char* argv[])
 {
-
-<<<<<<< Updated upstream
-=======
   using namespace harmony;
 
-  // -----Test chord---
-  //chord cmin(note(0), chord_quality::Minor);
-
-  //std::cout << cmin << std::endl;
-
-  //8
-
-  //for (auto p : cmin.get_pitches(5))
-  //{
-  //    std::cout << p << " ";
-  //}
-
-  //---Test chord progression---
-
-  chord_progression progression_251;
-  progression_251.add(chord(note(2), chord_quality::Minor));
-  progression_251.add(chord(note(7), chord_quality::Major));
-  progression_251.add(chord(note(0), chord_quality::Major));
-
-  
-  std::cout << progression_251 << std::endl;
-
-  for (auto c : progression_251.chords())
+  std::vector<chord> vec_chords = 
   {
-      for (auto p : c.get_pitches())
+    chord(note(0), chord_quality::Major),
+    chord(note(5), chord_quality::Minor),
+    chord(note(7), chord_quality::Major)
+  };
+
+  chord_progression p1(vec_chords);
+
+  std::array<chord,3> arr_chords = 
+  {
+    chord(note(11), chord_quality::Major),
+    chord(note(6), chord_quality::Augmented),
+    chord(note(1), chord_quality::Minor)
+  };
+  
+  chord_progression p2(arr_chords);
+
+  auto voicing = generate_voicings(p2, 4);
+  auto voicing_smooth = generate_voicings_smooth(p2, 4);
+  for (const auto& chord_voicing : voicing)
+  {
+      for (const auto& p : chord_voicing)
       {
           std::cout << p << " ";
       }
       std::cout << "\n";
   }
 
-  
   // -----Test pitch-----
   pitch middle_c{60};
   pitch a4(69);
 
   std::cout <<"Middle C: MIDI note: " << middle_c.get_midi()
-            <<", Frequency: " <<middle_c.get_frequency().hz() << ".Hz,"
+            <<", Frequency: " <<middle_c.get_frequency().get_hz() << ".Hz,"
             <<" Scientific Notation: " << name(middle_c) << std::endl;
 
   std::cout <<"A4: MIDI note: " << a4.get_midi()
-            <<", Frequency: " <<a4.get_frequency().hz() << ".Hz,"
+            <<", Frequency: " <<a4.get_frequency().get_hz() << ".Hz,"
             <<" Scientific Notation: " << name(a4) << std::endl;
 
   std::cout << "Interval (A4 - C4): " << (a4 - middle_c) << " semitones"<< std::endl;
@@ -106,7 +98,7 @@ int main(int argc, const char* argv[])
   frequency f1(440.0);
   frequency f2(880.0);
 
-  std::cout << "Frequencies: f1 = " << f1.hz() << " Hz, f2 = " << f2.hz() << " Hz" << std::endl;
+  std::cout << "Frequencies: f1 = " << f1.get_hz() << " Hz, f2 = " << f2.get_hz() << " Hz" << std::endl;
   std::cout << "Are they octave equivalent? "
             << std::boolalpha <<is_octave_equivalent(f1, f2) << std::endl;
 
@@ -115,6 +107,7 @@ int main(int argc, const char* argv[])
   note n2 = n1 + 12;  // transpose by one otcave
 
   std::cout << n1 << "\n" << n2 << std::endl;
+
   
   std::cout << "Interval (n2 - n1): " << interval_in_semitones(n2, n1) << " semitones"<< std::endl;;
   std::cout << "Are n1 and n2 octave equivalent? "
@@ -123,7 +116,6 @@ int main(int argc, const char* argv[])
   // -------------------------------------------
 
 
->>>>>>> Stashed changes
   std::cout << "---- Default construction ----\n";
   string a; // default ctor
 

@@ -66,8 +66,8 @@ namespace harmony {
     frequency(double hz = 440.0);
 
     // ---Accessors---
-    double hz() const;
-    uint8_t midi() const; 
+    double get_hz() const;
+    uint8_t get_midi() const; 
     pitch get_pitch() const;
 
     // ---Mutating Member Operators---

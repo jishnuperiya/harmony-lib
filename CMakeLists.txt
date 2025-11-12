@@ -29,7 +29,7 @@ project(jishnu
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-find_package(Doxygen    1.9.8  REQUIRED)
+#find_package(Doxygen    1.9.8  REQUIRED)
 find_package(DocTest    2.4.11 REQUIRED)
 find_package(RapidCheck        REQUIRED)
 
@@ -49,7 +49,9 @@ add_library(jishnu-lib STATIC
   src/string.cpp
   src/pitch.cpp
   src/frequency.cpp
-  src/note.cpp)
+  src/note.cpp
+  src/chord.cpp
+  src/progression.cpp)
 
 target_link_libraries(jishnu-lib)
 
@@ -60,7 +62,7 @@ set_target_properties(jishnu-lib PROPERTIES OUTPUT_NAME jishnu)
 #*****************************************************************************
 
 add_executable(jishnu
-  src/jishnu.cpp)
+  src/jishnu.cpp )
 
 target_link_libraries(jishnu
   jishnu-lib)
@@ -72,12 +74,20 @@ add_executable(jishnu-test
   test/example.cpp
   test/test_pitch.cpp
   test/test_frequency.cpp
-  test/test_note.cpp)
+  test/test_note.cpp
+  test/test_voicing.cpp)
 
 
-# Workaround for RapidCheck missing <cstdint> include
+
+# --------------------------------------------------------------------
+# Workaround for RapidCheck missing <cstdint> include (MSVC + GCC/Clang)
+# --------------------------------------------------------------------
 if(TARGET rapidcheck)
-  target_compile_options(rapidcheck PRIVATE -include cstdint)
+  if(MSVC)
+    target_compile_options(rapidcheck PRIVATE /FIcstdint)
+  else()
+    target_compile_options(rapidcheck PRIVATE -include cstdint)
+  endif()
 endif()
 
 

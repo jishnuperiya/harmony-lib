@@ -16,9 +16,6 @@ using namespace harmony;
 
 chord_progression::chord_progression() = default;
 
-chord_progression::chord_progression(std::vector<chord> chords)
-  : chords_{chords} {}
-
 void chord_progression::add(const chord& c)
 {
   chords_.push_back(c);

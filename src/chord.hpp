@@ -37,10 +37,8 @@ namespace harmony
     std::string name() const;
 
     //generate list of pitches
-    std::vector<pitch> get_pitches(int octave = 4) const;
-
     std::vector<note> get_notes() const;
-
+    std::vector<pitch> get_pitches(int octave = 4) const;
   };
   std::ostream& operator<<(std::ostream& os, const chord& c);
 }

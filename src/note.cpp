@@ -58,6 +58,6 @@ bool harmony::is_octave_equivalent(note lhs, note rhs)
 
 std::ostream& harmony::operator<<(std::ostream& os, note n)
 {
-  os << "Note{" << n.name() << "}";
+  os << n.name();
   return os;
 }

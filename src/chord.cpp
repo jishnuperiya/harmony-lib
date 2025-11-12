@@ -2,7 +2,6 @@
 #include <sstream>
 #include "chord.hpp"
 
-
 using namespace harmony;
 
 chord::chord(note root, chord_quality quality)
@@ -12,60 +11,57 @@ note chord::root() const { return root_; }
 
 chord_quality chord::quality() const { return quality_;}
 
-
 std::string chord::name() const 
-{ // chord* this; 
-  static const std::map<chord_quality, std::string> quality_names = 
-  {
-    {chord_quality::Major, ""},
-    {chord_quality::Minor, "m"},
-    {chord_quality::Diminished, "dim"},
-    {chord_quality::Augmented, "aug"},
-  };
-
+{ 
   std::ostringstream o;
-  //o << root_.name();
   o << root_;
-
-
   switch (quality_)
   {
   case chord_quality::Major:
-      /*o << "";*/
       break;
   case chord_quality::Minor:
-      o << ´-´;
+      o << '-';
       break;
   case chord_quality::Diminished:
-      o << "o";
+      o << 'o';
       break;
   case chord_quality::Augmented:
-      o << "+";
+      o << '+';
       break;
   }
   return o.str();
-  return (*this).root_.name() + quality_names.at(quality_);
+}
+
+std::vector<note> chord::get_notes() const
+{
+    std::vector<int> semitones;
+    switch (quality_)
+    {
+    case chord_quality::Major:      semitones = { 0, 4, 7 }; break;
+    case chord_quality::Minor:      semitones = { 0, 3, 7 }; break;
+    case chord_quality::Diminished: semitones = { 0, 3, 6 }; break;
+    case chord_quality::Augmented:  semitones = { 0, 4, 8 }; break;
+    }
+    std::vector<note> result;
+    for (int semitone : semitones)
+    {
+        //note transposed_note = root_.transpose(semitone) -> doesnt work bc root_ is const
+        result.push_back(root_ + semitone);//not able to use the transpose function here. should i make the get_ntoes non const?
+        // but access methods need to be const? or what the solution here
+    }
+    return result;
 }
 
 std::vector<pitch> chord::get_pitches(int octave) const 
 {
-  std::map<chord_quality, std::vector<int>> intervals =
-  {
-    {chord_quality::Major, {0, 4, 7}},
-    {chord_quality::Minor, {0, 3, 7}},
-    {chord_quality::Diminished, {0, 3, 6}},
-    {chord_quality::Augmented, {0, 4, 8}},
-  };
+	auto notes = get_notes();
+	std::vector<pitch> pitches;
 
-  std::vector<pitch> result;
-  auto base = root_.get_pitch(octave);
-  int base_midi = base.get_midi();
-
-  for (int semitones : intervals.at(quality_)) 
-  {
-    result.push_back(pitch(base_midi + semitones));
-  }
-  return result;
+    for(const auto& n : notes)
+    {
+	  pitches.push_back(n.get_pitch(octave));
+	}
+	return pitches;
 }
 
 std::ostream& harmony::operator<<(std::ostream& os, const chord& c) {
