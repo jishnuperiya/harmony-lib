@@ -4,30 +4,23 @@
 
 using namespace harmony;
 
+// ---TODO---
 //open a filebuf
 /*
 create file buf
 ostream helding on to that gilebuf
-
 ofstream subclass
-
 write pitch or note to the ofstream
-
 since ofstream is ostream it can be apssed to <<
-
-
 ----
-
 instead of ofstream use cout.
 different streambuffers.
-
-
 */
 
 TEST_CASE("frequency construction and accessors")
 {  
   pitch p1(69);
-  CHECK(doctest::Approx(p1.get_frequency().hz()) == 440.0);
+  CHECK(doctest::Approx(p1.get_frequency().get_hz()) == 440.0);
   CHECK_EQ(p1.get_midi(),69);
 }
 

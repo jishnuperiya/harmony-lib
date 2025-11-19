@@ -43,14 +43,14 @@ TEST_CASE("note converts to pitch and frequency correctly") {
     frequency f = c.get_frequency(4);
 
     CHECK_EQ(p.get_midi(), 60);
-    CHECK(std::fabs(f.hz() - 261.63) < EPS);
+    CHECK(std::fabs(f.get_hz() - 261.63) < EPS);
 
     note a(9); // A
     pitch p2 = a.get_pitch(4);
     frequency f2 = a.get_frequency(4);
 
     CHECK_EQ(p2.get_midi(), 69);
-    CHECK(std::fabs(f2.hz() - 440.0) < EPS);
+    CHECK(std::fabs(f2.get_hz() - 440.0) < EPS);
 }
 
 // ------------------------------------------------------------
