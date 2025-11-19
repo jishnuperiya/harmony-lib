@@ -55,12 +55,12 @@ std::vector<note> chord::get_notes() const
 std::vector<pitch> chord::get_pitches(int octave) const 
 {
 	auto notes = get_notes();
-	std::vector<pitch> pitches;
+	std::vector<pitch> pitches(notes.begin(), notes.end());
 
-    for(const auto& n : notes)
+    /*for(const auto& n : notes)
     {
 	  pitches.push_back(n.get_pitch(octave));
-	}
+	}*/
 	return pitches;
 }
 

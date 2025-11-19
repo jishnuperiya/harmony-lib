@@ -68,7 +68,6 @@ int main(int argc, const char* argv[])
   chord_progression p2(arr_chords);
 
   auto voicing = generate_voicings(p2, 4);
-  auto voicing_smooth = generate_voicings_smooth(p2, 4);
   for (const auto& chord_voicing : voicing)
   {
       for (const auto& p : chord_voicing)
