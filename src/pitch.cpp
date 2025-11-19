@@ -6,10 +6,7 @@
 harmony::pitch::pitch(int midi_note)
   : midi_note_{static_cast<uint8_t>(midi_note)}
 {
-  if (midi_note < 0 || midi_note > 127)
-  {
-    throw std::out_of_range("MIDI note value must be between 0 and 127");
-  }
+  assert(midi_note >= 0 && midi_note <= 127);
 }
 
 uint8_t harmony::pitch::get_midi() const
