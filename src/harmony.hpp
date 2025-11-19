@@ -9,9 +9,9 @@
 //*
 //****************************************************************************
 #pragma once
-#include <string> //For std::string
-#include <cstdint> //For uint8_t
-#include <ostream> //For std::ostream
+#include <string>       //For std::string
+#include <cstdint>      //For uint8_t
+#include <ostream>      //For std::ostream
 //****************************************************************************
 
 namespace harmony {
@@ -32,14 +32,14 @@ namespace harmony {
 // ---Accessors---
     uint8_t get_midi() const;
     frequency get_frequency() const;
-    harmony::note get_note() const;
+    note get_note() const;
 
     // ---Mutating member operators---
     pitch& operator+=(int semitones);
     pitch& operator-=(int semitones);
 
   private:
-    uint8_t midi_note_ = 60;  // 0–127
+    uint8_t midi_note_;  // 0–127
   };
 
   //---Non member functions---
@@ -77,7 +77,7 @@ namespace harmony {
     //*= and /= better than + -
 
   private:
-    double hz_ = 440.0; 
+    double hz_; 
   };
 
   // ---Non-member functions---

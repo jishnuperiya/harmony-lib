@@ -1,15 +1,13 @@
 #include "harmony.hpp"
-#include <cassert> //for assert
-#include <cmath> //for fabs
-#include <stdexcept> //for std::inalid_argument
+
+#include <cassert>      //for assert
+#include <cmath>        //for fabs
+#include <stdexcept>    //for std::inalid_argument
 
 harmony::frequency::frequency(double hz)
   : hz_{hz}
 {
-  if (hz <= 0.0) 
-  {
-    throw std::invalid_argument("Frequency must be a positive number.");
-  }
+  assert(hz_ > 0.0 && "frequency must stay positive");
 }
 
 double harmony::frequency::get_hz() const
@@ -25,28 +23,20 @@ uint8_t harmony::frequency::get_midi() const
 harmony::pitch harmony::frequency::get_pitch() const
 {
   // Convert to nearest MIDI note number.
-  int midi_val = static_cast<int>(std::round(69 + 12 * std::log2(hz_ / 440.0)));
-
-  return pitch(midi_val);
+  return pitch(static_cast<int>(std::round(69 + 12 * std::log2(hz_ / 440.0))));
 }
 
 harmony::frequency& harmony::frequency::operator+=(double delta_hz)
 {
   hz_+=delta_hz;
-  if (hz_ <= 0.0) 
-  {
-    throw std::invalid_argument("Frequency mutation resulted in negative value.");
-  }
+  assert(hz_ > 0.0 && "frequency must stay positive");
   return *this;
 }
 
 harmony::frequency& harmony::frequency::operator-=(double delta_hz)
 {
   hz_-=delta_hz;
-  if (hz_ <= 0.0) 
-  {
-    throw std::invalid_argument("Frequency mutation resulted in negative value.");
-  }
+  assert(hz_ > 0.0 && "frequency must stay positive");
   return *this;
 }
 
@@ -70,6 +60,5 @@ bool harmony::is_octave_equivalent(frequency lhs, frequency rhs)
 
 std::ostream& harmony::operator<<(std::ostream& os, harmony::frequency f)
 {
-   os << f.get_hz();
-   return os;
+   return os << f.get_hz();
 }

@@ -1,8 +1,9 @@
 #include "harmony.hpp"
-#include <cmath> //for std::pow
-#include <cassert> //for assert
-#include <stdexcept> //for std::inalid_argument
-#include <sstream> //for std::ostringstream
+
+#include <cmath>            //for std::pow
+#include <cassert>          //for assert
+#include <stdexcept>        //for std::inalid_argument
+#include <sstream>          //for std::ostringstream
 
 namespace harmony
 {
