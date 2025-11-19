@@ -14,7 +14,6 @@
 #include <ostream> //For std::ostream
 //****************************************************************************
 
-
 namespace harmony {
 
   class frequency;
@@ -28,11 +27,13 @@ namespace harmony {
   public:
     // ---Special Member Functions ---
     pitch(int midi_note = 60);
-//  pitch(frequency);bfreq class could have a fn called get pitch Or calclualtion here 
-    // ---Accessors---
+    pitch(frequency);
+
+// ---Accessors---
     uint8_t get_midi() const;
     frequency get_frequency() const;
-    note get_note() const;
+    harmony::note get_note() const;
+
     // ---Mutating member operators---
     pitch& operator+=(int semitones);
     pitch& operator-=(int semitones);
