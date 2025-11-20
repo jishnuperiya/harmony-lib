@@ -10,35 +10,51 @@
 //****************************************************************************
 
 #pragma once
-#include "harmony.hpp" //for harmony::note
-#include <vector> //for std::vector
+#include "harmony.hpp"         //for harmony::note
+#include <vector>              //for std::vector
 
 namespace harmony 
 {
-  enum class chord_quality
-  {
-    Major = 0,
-    Minor = 1,
-    Diminished = 2,
-    Augmented = 3
-  };
-// -------------------
-// chord Class
-// -------------------
+
+
   class chord
   {
-  private:
-    note root_;
-    chord_quality quality_;
-  public:
-    chord(harmony::note, harmony::chord_quality);
-    note root() const;
-    chord_quality quality() const;
-    std::string name() const;
 
-    //generate list of pitches
-    std::vector<note> get_notes() const;
-    std::vector<pitch> get_pitches(int octave = 4) const;
+  public:
+    enum class chord_quality
+    {
+      Major = 0,
+      Minor = 1,
+      Diminished = 2,
+      Augmented = 3
+    };
+
+  public:
+    template<typename note_it>
+                        chord(note r, note_it b, note_it e);
+    note                root()    const;
+    std::string         name()    const;
+
+  
+    std::vector<note>   get_notes() const;
+    std::vector<pitch>  get_pitches(int octave = 4) const;
+  
+  private:
+    note                 const root_;
+    std::array<bool, 12> const notes_;
   };
+
   std::ostream& operator<<(std::ostream& os, const chord& c);
+}
+
+template<typename note_it>
+harmony::chord::chord(note r, note_it b, note_it e)
+    : root_{ r }, notes_{}
+{
+    notes_.fill(false);
+
+    for (auto it = b; it != e; ++it)
+    {
+        notes_[it->get_midi() % 12] = true;
+    }
 }

@@ -12,6 +12,9 @@
 #include <string>       //For std::string
 #include <cstdint>      //For uint8_t
 #include <ostream>      //For std::ostream
+#include <array>        //For std::array
+#include <string_view> //For std::string_view
+#include <utility>      //For std::pair
 //****************************************************************************
 
 namespace harmony {
@@ -19,6 +22,43 @@ namespace harmony {
   class frequency;
   class pitch;
   class note;
+
+  inline constexpr std::array<const char*, 12> NOTE_NAMES = 
+  {{
+    "C", "C#", "D", "D#", "E", "F",
+    "F#", "G", "G#", "A", "A#", "B"
+  }};
+
+  inline constexpr std::pair<std::string_view, int> ENHARMONIC_NAMES[] = 
+  {
+   {"C", 0},  {"B#", 0},
+
+   {"C#", 1}, {"Db", 1},
+
+   {"D", 2},
+
+   {"D#", 3}, {"Eb", 3},
+
+   {"E", 4},  {"Fb", 4},
+
+   {"F", 5},  {"E#", 5},
+   
+   {"F#", 6}, {"Gb", 6},
+
+   {"G", 7},
+
+   {"G#", 8}, {"Ab", 8},
+
+   {"A", 9},
+
+   {"A#", 10},{"Bb", 10},
+
+   {"B", 11}, {"Cb", 11},
+  };
+
+  // Note Parsing Helpers
+  int note_index_from_name(std::string_view s);
+
   // -------------------
   // pitch Class
   // -------------------
@@ -98,6 +138,7 @@ namespace harmony {
   public:
     // ---Special Member Functions---
     note(uint8_t value=0);
+    note(std::string_view name);
     
     // ---Accessors---
     uint8_t value() const;

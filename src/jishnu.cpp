@@ -49,7 +49,7 @@ int main(int argc, const char* argv[])
 {
   using namespace harmony;
 
-  std::vector<chord> vec_chords = 
+  /*std::vector<chord> vec_chords = 
   {
     chord(note(0), chord_quality::Major),
     chord(note(5), chord_quality::Minor),
@@ -63,19 +63,19 @@ int main(int argc, const char* argv[])
     chord(note(11), chord_quality::Major),
     chord(note(6), chord_quality::Augmented),
     chord(note(1), chord_quality::Minor)
-  };
+  };*/
   
-  chord_progression p2(arr_chords);
+  //c/*hord_progression p2(arr_chords);
 
-  auto voicing = generate_voicings(p2, 4);
-  for (const auto& chord_voicing : voicing)
-  {
-      for (const auto& p : chord_voicing)
-      {
-          std::cout << p << " ";
-      }
-      std::cout << "\n";
-  }
+  //auto voicing = generate_voicings(p2, 4);
+  //for (const auto& chord_voicing : voicing)
+  //{
+  //    for (const auto& p : chord_voicing)
+  //    {
+  //        std::cout << p << " ";
+  //    }
+  //    std::cout << "\n";
+  //}*/
 
   // -----Test pitch-----
   pitch middle_c{60};
