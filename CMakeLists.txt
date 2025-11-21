@@ -4,7 +4,7 @@
 #**  Version : $Header:$
 #**
 #**
-#**  Purpose : CMake build script for the jishnu project.
+#**  Purpose : CMake build script for the harmony project.
 #**
 #**
 #**  See Also: https://cmake.org/cmake/help/latest/
@@ -21,7 +21,7 @@
 
 cmake_minimum_required(VERSION 3.20.2)
 
-project(jishnu
+project(harmony
   VERSION       0.1.0.1
   HOMEPAGE_URL  "https://github.com/jishnuperiya/repo-no-name")
 
@@ -43,30 +43,30 @@ add_compile_options(-Wall)
 
 #*****************************************************************************
 
-add_library(jishnu-lib STATIC
+add_library(harmony-lib STATIC
   src/pitch.cpp
   src/frequency.cpp
   src/note.cpp
   src/chord.cpp
   src/progression.cpp)
 
-target_link_libraries(jishnu-lib)
+target_link_libraries(harmony-lib)
 
-target_include_directories(jishnu-lib PUBLIC src)
+target_include_directories(harmony-lib PUBLIC src)
 
-set_target_properties(jishnu-lib PROPERTIES OUTPUT_NAME jishnu)
+set_target_properties(harmony-lib PROPERTIES OUTPUT_NAME harmony)
 
 #*****************************************************************************
 
-add_executable(jishnu
+add_executable(harmony
   src/jishnu.cpp )
 
-target_link_libraries(jishnu
-  jishnu-lib)
+target_link_libraries(harmony
+  harmony-lib)
 
   #*****************************************************************************
 
-add_executable(jishnu-test
+add_executable(harmony-test
   test/main.cpp
   test/test_pitch.cpp
   test/test_frequency.cpp
@@ -87,13 +87,13 @@ if(TARGET rapidcheck)
 endif()
 
 
-target_link_libraries(jishnu-test
-  jishnu-lib
+target_link_libraries(harmony-test
+  harmony-lib
   rapidcheck
   doctest::doctest)
 
 #*****************************************************************************
 
-add_test(NAME jishnu.example COMMAND jishnu-test)
+add_test(NAME harmony.example COMMAND harmony-test)
 
 #*****************************************************************************
