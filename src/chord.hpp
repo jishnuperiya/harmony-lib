@@ -21,7 +21,7 @@ namespace harmony
   {
 
   public:
-    enum class chord_quality
+    enum class quality  
     {
       Major = 0,
       Minor = 1,

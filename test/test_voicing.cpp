@@ -24,7 +24,7 @@ using namespace harmony;
 // ------------------------------------------------------------
 TEST_CASE("chord generates correct pitches") 
 {
-  chord cmaj(note(0), chord_quality::Major);
+  chord cmaj(note(0), chord::quality::Major);
   auto pitches = cmaj.get_pitches(4);
 
   // Expect C4 E4 G4

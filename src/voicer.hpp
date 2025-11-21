@@ -14,7 +14,7 @@
 #include <vector> //for std::vector
 namespace harmony
 {
-inline std::vector<std::vector<pitch>> generate_voicings(const chord_progression& progression, int octave_start = 4)
+std::vector<std::vector<pitch>> generate_voicings(const chord_progression& progression, int octave_start = 4)
 {
 	std::vector<std::vector<pitch>> voicings;
 	for (const auto& chord : progression.chords())

@@ -3,25 +3,39 @@
 #include <cmath> //for fabs
 #include <stdexcept> //for std::inalid_argument
 
-namespace harmony
-{
+namespace harmony{
+namespace {
 
-inline int note_index_from_name(std::string_view s)
-{
-  for (auto const& [name, index] : ENHARMONIC_NAMES)
+  note note_from_name(std::string_view s)
   {
-    if (s == name)
-      return index;
-  }
-  throw std::invalid_argument("Invalid note name");
-}
 
+    for (auto const& [name, n] : std::initializer_list<std::pair<std::string_view, note>>{
+
+        {"C", 0},  {"B#", 0},
+        {"C#", 1}, {"Db", 1},
+        {"D", 2},
+        {"D#", 3}, {"Eb", 3},
+        {"E", 4},  {"Fb", 4},
+        {"F", 5},  {"E#", 5},
+        {"F#", 6}, {"Gb", 6},
+        {"G", 7},
+        {"G#", 8}, {"Ab", 8},
+        {"A", 9},
+        {"A#", 10},{"Bb", 10},
+        {"B", 11}, {"Cb", 11} })
+    {
+        if (s == name)
+            return n;
+    }
+    throw std::invalid_argument("Invalid note name");
+  }
+}
   note::note(uint8_t value)
     : note_{static_cast<uint8_t>(value % 12)} 
   {}
 
   note::note(std::string_view s)
-	  : note_{ static_cast<uint8_t>(note_index_from_name(s))}
+	  : note (note_from_name(s))
   { }
 
   uint8_t note::value() const 

@@ -23,13 +23,13 @@
 
 
 // function taking Complex by reference
-void takeByReference(const Complex& x)
+void takeByReference(const Complex& )
 {
   std::cout << "Inside takeByValue()\n";
 }
 
 // function taking string by reference
-void takeByReference(const string& x)
+void takeByReference(const string& )
 {
   std::cout << "Inside takeByReference()\n";
 }
@@ -45,7 +45,7 @@ string makeString()
 {
   return string{"returned_string"};
 }
-int main(int argc, const char* argv[])
+int main(int , const char* [])
 {
   using namespace harmony;
 

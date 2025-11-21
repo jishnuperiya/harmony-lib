@@ -25,8 +25,8 @@ namespace harmony
 	  chord_progression(const container& chords)
 	    : chords_{std::begin(chords),std::end(chords)} {}
 	  // Explicit overload for brace-init syntax
-	  chord_progression(std::initializer_list<chord> chords)
-		: chords_{ chords } {}
+	 // //chord_progression(std::initializer_list<chord> chords)
+		//: chords_{ chords } {}
 	  void add(const chord& c);
 	  const std::vector<chord>& chords() const;
   };
