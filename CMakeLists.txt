@@ -78,7 +78,6 @@ add_executable(jishnu-test
   test/test_voicing.cpp)
 
 
-
 # --------------------------------------------------------------------
 # Workaround for RapidCheck missing <cstdint> include (MSVC + GCC/Clang)
 # --------------------------------------------------------------------
