@@ -86,8 +86,8 @@ namespace harmony {
   {
   public:
 
-                note(uint8_t value=0);
-                note(std::string_view name);
+    explicit   note(uint8_t value=0);
+    explicit   note(std::string_view name);
     
     uint8_t     value()                     const;
     std::string name()                      const;
