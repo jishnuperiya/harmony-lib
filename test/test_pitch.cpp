@@ -1,7 +1,3 @@
-#include <doctest/doctest.h>
-#include "harmony.hpp"
-#include <cmath>
-
 //******** Copyright © 2025 Jishnu Periya, Jonathon Bell. All rights reserved.
 //*
 //*
@@ -18,9 +14,9 @@
 //**********************************************************************w*w***
 
 #include <doctest/doctest.h>                             // For doctest
-#include "harmony.hpp"                                   // For harmony::chord
 #include "fstream"                                       // For std::filebuf, std::ifstream
 #include <cmath>                                         // For std::fabs
+#include "harmony.hpp"                                   // For harmony::chord
 
 //****************************************************************************
 

@@ -1,10 +1,10 @@
-#include "harmony.hpp"
-
 #include <cmath>            //for std::pow
 #include <cassert>          //for assert
 #include <stdexcept>        //for std::inalid_argument
 #include <sstream>          //for std::ostringstream
 #include <array>            //for std::array
+#include "harmony.hpp"      //for harmony::pitch, harmony::frequency, harmony::note, harmony::NOTE_NAMES
+
 
 namespace harmony
 {

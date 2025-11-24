@@ -15,8 +15,9 @@
 //**********************************************************************w*w***
 
 #include <doctest/doctest.h>                             // For doctest
-#include "harmony.hpp"									 // For harmony::frequency
 #include "fstream"                                       // For std::filebuf, std::ifstream
+#include "harmony.hpp"									 // For harmony::frequency
+
 //****************************************************************************
 
 

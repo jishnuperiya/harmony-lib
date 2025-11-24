@@ -10,11 +10,11 @@
 //****************************************************************************
 
 #include <iostream>                 // For cout
+#include <array>                    // For std::array
 #include "harmony.hpp"              // For pitch, frequency and note                                 
 #include "chord.hpp"                // For harmony::chord
 #include "progression.hpp"          // For harmony::chord_progression
 #include "voicer.hpp"               // For generate_voicings
-#include <array>                    // For std::array
 
 //****************************************************************************
 

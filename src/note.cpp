@@ -1,7 +1,8 @@
-#include "harmony.hpp"
-#include <cassert> //for assert
-#include <cmath> //for fabs
-#include <stdexcept> //for std::inalid_argument
+
+#include <cassert>                  //for assert
+#include <cmath>                    //for fabs
+#include <stdexcept>                //for std::inalid_argument
+#include "harmony.hpp"              //for harmony::note
 
 namespace harmony{
 namespace {

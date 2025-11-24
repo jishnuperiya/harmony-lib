@@ -14,9 +14,9 @@
 //**********************************************************************w*w***
 
 #include <doctest/doctest.h>   // For doctest
+#include <fstream>             // For std::filebuf, std::ifstream
 #include "harmony.hpp"         // For harmony::chord, harmony::note, harmony::chord_progression
 #include "progression.hpp"     // For harmony::chord_progression
-#include <fstream>             // For std::filebuf, std::ifstream
 
 //****************************************************************************
 

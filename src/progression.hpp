@@ -10,8 +10,8 @@
 //****************************************************************************
 
 #pragma once
-#include "chord.hpp"			//for harmony::chord
 #include <vector>				//for std::vector
+#include "chord.hpp"			//for harmony::chord
 
 //****************************************************************************
 

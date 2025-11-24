@@ -10,8 +10,8 @@
 //****************************************************************************
 
 #pragma once
-#include "harmony.hpp"         //for harmony::note
 #include <vector>              //for std::vector
+#include "harmony.hpp"         //for harmony::note
 
 namespace harmony 
 {
