@@ -10,26 +10,30 @@
 //****************************************************************************
 
 #pragma once
-#include "chord.hpp" //for harmony::chord
-#include <vector> //for std::vector
+#include <vector>				//for std::vector
+#include "chord.hpp"			//for harmony::chord
+
+//****************************************************************************
 
 namespace harmony
 {
   class chord_progression
   {
+  public:
+								chord_progression() = default;
+    template<typename chord_it>
+					         	chord_progression(chord_it b, chord_it e);
+
+	void						add(const chord& c);
+	const std::vector<chord>&   chords()              const;
+
   private:
-	std::vector<chord> chords_;
-    public:
-	  chord_progression();
-	  template<typename container>
-	  chord_progression(const container& chords)
-	    : chords_{std::begin(chords),std::end(chords)} {}
-	  // Explicit overload for brace-init syntax
-	  chord_progression(std::initializer_list<chord> chords)
-		: chords_{ chords } {}
-	  void add(const chord& c);
-	  const std::vector<chord>& chords() const;
+	std::vector<chord>			chords_;
   };
 
-  std::ostream& operator<<(std::ostream& os, const chord_progression& p);
+  std::ostream&					operator<<(std::ostream& os, const chord_progression& p);
 }
+
+template<typename chord_it>
+harmony::chord_progression::chord_progression(chord_it b, chord_it e)
+  : chords_{b,e}{}

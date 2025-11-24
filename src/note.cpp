@@ -1,63 +1,87 @@
-#include "harmony.hpp"
-#include <cassert> //for assert
-#include <cmath> //for fabs
-#include <stdexcept> //for std::inalid_argument
-#include <array> //for std::array
 
-std::array<const char*, 12> note_names = {
-  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-};
+#include <cassert>                  //for assert
+#include <cmath>                    //for fabs
+#include <stdexcept>                //for std::inalid_argument
+#include "harmony.hpp"              //for harmony::note
 
+namespace harmony{
+namespace {
 
-harmony::note::note(uint8_t value)
-  : note_{static_cast<uint8_t>(value % 12)} 
-{}
+  note note_from_name(std::string_view s)
+  {
+    for (auto const& [name, n] : std::initializer_list<std::pair<std::string_view, note>>{
 
-uint8_t harmony::note::value() const {
-  return note_;
+        {"C", 0},  {"B#", 0},
+        {"C#", 1}, {"Db", 1},
+        {"D", 2},
+        {"D#", 3}, {"Eb", 3},
+        {"E", 4},  {"Fb", 4},
+        {"F", 5},  {"E#", 5},
+        {"F#", 6}, {"Gb", 6},
+        {"G", 7},
+        {"G#", 8}, {"Ab", 8},
+        {"A", 9},
+        {"A#", 10},{"Bb", 10},
+        {"B", 11}, {"Cb", 11} })
+    {
+        if (s == name)
+            return n;
+    }
+    throw std::invalid_argument("Invalid note name");
+  }
 }
+  note::note(uint8_t value)
+    : note_{static_cast<uint8_t>(value % 12)} 
+  {}
 
-std::string harmony::note::name() const
-{
-  return note_names[note_];
-}
+  note::note(std::string_view s)
+	  : note (note_from_name(s))
+  { }
 
-harmony::pitch harmony::note::get_pitch(int octave) const 
-{
-  int midi_val = (octave + 1) * 12 + note_;
-  return pitch(midi_val);
-}
+  uint8_t note::value() const 
+  {
+    return note_;
+  }
 
-harmony::frequency harmony::note::get_frequency(int octave) const 
-{
-  return get_pitch(octave).get_frequency();
-}
+  std::string note::name() const
+  {
+    return NOTE_NAMES[note_];
+  }
 
-harmony::note& harmony::note::transpose(int semitones)
-{
-  int new_val = static_cast<int>(note_) + semitones;
-  new_val = ((new_val % 12) + 12) % 12; // proper wrapping for negatives
-  note_ = static_cast<uint8_t>(new_val);
-  return *this;
-}
-harmony::note harmony::operator+(harmony::note n, int semitones)
-{
-  n.transpose(semitones);
-  return n;
-}
+  pitch note::get_pitch(int octave) const 
+  {
+    return pitch((octave + 1) * 12 + note_);
+  }
 
-int harmony::interval_in_semitones(note lhs, note rhs)
-{
-  return ((int)lhs.value() - (int)rhs.value() + 12) % 12;
-}
+  frequency note::get_frequency(int octave) const 
+  {
+    return get_pitch(octave).get_frequency();
+  }
 
-bool harmony::is_octave_equivalent(note lhs, note rhs)
-{
-  return lhs.value() == rhs.value();
-}
+  note& note::transpose(int semitones)
+  {
+    note_ = static_cast<uint8_t>((((int)note_ + semitones) % 12 + 12) % 12);
+    return *this;
+  }
 
-std::ostream& harmony::operator<<(std::ostream& os, note n)
-{
-  os << n.name();
-  return os;
+  note operator+(note n, int semitones)
+  {
+    return n.transpose(semitones);
+  }
+
+  int interval_in_semitones(note lhs, note rhs)
+  {
+    return ((int)lhs.value() - (int)rhs.value() + 12) % 12;
+  }
+
+  bool is_octave_equivalent(note lhs, note rhs)
+  {
+    return lhs.value() == rhs.value();
+  }
+
+  std::ostream& operator<<(std::ostream& os, note n)
+  {
+    return os << n.name();
+  }
+
 }
