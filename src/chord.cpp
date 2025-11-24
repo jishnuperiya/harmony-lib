@@ -36,9 +36,9 @@ std::vector<pitch> chord::get_pitches(int octave) const
 
   result.reserve(notes.size());
 
-  for (auto it = notes.begin(); it != notes.end(); ++it)
+  for (auto n : notes)
   {
-    result.emplace_back(it->get_pitch(octave));
+    result.push_back(n.get_pitch(octave));
   }
   return result;
 }
