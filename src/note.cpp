@@ -8,7 +8,6 @@ namespace {
 
   note note_from_name(std::string_view s)
   {
-
     for (auto const& [name, n] : std::initializer_list<std::pair<std::string_view, note>>{
 
         {"C", 0},  {"B#", 0},
@@ -62,11 +61,6 @@ namespace {
   {
     note_ = static_cast<uint8_t>((((int)note_ + semitones) % 12 + 12) % 12);
     return *this;
-
-    /*int new_val = (int(note_) + semitones) % 12;
-    if (new_val < 0) new_val += 12;
-    note_ = uint8_t(new_val);
-    return *this;*/
   }
 
   note operator+(note n, int semitones)

@@ -59,7 +59,7 @@ set_target_properties(harmony-lib PROPERTIES OUTPUT_NAME harmony)
 #*****************************************************************************
 
 add_executable(harmony
-  src/jishnu.cpp )
+  src/main.cpp )
 
 target_link_libraries(harmony
   harmony-lib)
@@ -71,13 +71,10 @@ add_executable(harmony-test
   test/test_pitch.cpp
   test/test_frequency.cpp
   test/test_note.cpp
+  test/test_chord.cpp
+  test/test_progression.cpp
   test/test_voicing.cpp)
 
-
-
-# --------------------------------------------------------------------
-# Workaround for RapidCheck missing <cstdint> include (MSVC + GCC/Clang)
-# --------------------------------------------------------------------
 if(TARGET rapidcheck)
   if(MSVC)
     target_compile_options(rapidcheck PRIVATE /FIcstdint)

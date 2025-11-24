@@ -26,16 +26,16 @@ harmony::pitch harmony::frequency::get_pitch() const
   return pitch(static_cast<int>(std::round(69 + 12 * std::log2(hz_ / 440.0))));
 }
 
-harmony::frequency& harmony::frequency::operator+=(double delta_hz)
+harmony::frequency& harmony::frequency::operator*=(double delta_hz)
 {
-  hz_+=delta_hz;
+  hz_*=delta_hz;
   assert(hz_ > 0.0 && "frequency must stay positive");
   return *this;
 }
 
-harmony::frequency& harmony::frequency::operator-=(double delta_hz)
+harmony::frequency& harmony::frequency::operator/=(double delta_hz)
 {
-  hz_-=delta_hz;
+  hz_/=delta_hz;
   assert(hz_ > 0.0 && "frequency must stay positive");
   return *this;
 }

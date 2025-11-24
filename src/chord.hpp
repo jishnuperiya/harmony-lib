@@ -16,10 +16,8 @@
 namespace harmony 
 {
 
-
   class chord
   {
-
   public:
     enum class quality  
     {
@@ -32,6 +30,7 @@ namespace harmony
   public:
     template<typename note_it>
                         chord(note r, note_it b, note_it e);
+    
     note                root()    const;
     std::string         name()    const;
 
@@ -41,7 +40,7 @@ namespace harmony
   
   private:
     note                 const root_;
-    std::array<bool, 12> const notes_;
+    std::array<bool, 12>       notes_;
   };
 
   std::ostream& operator<<(std::ostream& os, const chord& c);
@@ -51,10 +50,8 @@ template<typename note_it>
 harmony::chord::chord(note r, note_it b, note_it e)
     : root_{ r }, notes_{}
 {
-    notes_.fill(false);
-
-    for (auto it = b; it != e; ++it)
-    {
-        notes_[it->get_midi() % 12] = true;
-    }
+  for (auto it = b; it != e; ++it)
+  {
+    notes_[static_cast<std::size_t>((it->get_pitch(4)).get_midi() % 12)] = true;
+  }
 }

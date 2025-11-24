@@ -9,135 +9,43 @@
 //*
 //****************************************************************************
 
-#include <iostream>    // For cout
+#include <iostream>                 // For cout
+#include "harmony.hpp"              // For pitch, frequency and note                                 
+#include "chord.hpp"                // For harmony::chord
+#include "progression.hpp"          // For harmony::chord_progression
+#include "voicer.hpp"               // For generate_voicings
+#include <array>                    // For std::array
 
-#include "complex.hpp" // For complex
-#include "string.hpp" // For string                                 
-#include "string.hpp" // For string
-#include "harmony.hpp" // For pitch, frequency and note                                 
-#include "chord.hpp" // For harmony::chord
-#include "progression.hpp"// For harmony::chord_progression
-#include "voicer.hpp" // For generate_voicings
-#include <array>    // For std::array
 //****************************************************************************
 
 
-// function taking Complex by reference
-void takeByReference(const Complex& )
-{
-  std::cout << "Inside takeByValue()\n";
-}
-
-// function taking string by reference
-void takeByReference(const string& )
-{
-  std::cout << "Inside takeByReference()\n";
-}
-
-// function returning Complex by value
-Complex makeComplex()
-{
-  return Complex(10.0, 20.0);
-}
-
-// function returning string by value
-string makeString()
-{
-  return string{"returned_string"};
-}
 int main(int , const char* [])
 {
   using namespace harmony;
 
-  /*std::vector<chord> vec_chords = 
-  {
-    chord(note(0), chord_quality::Major),
-    chord(note(5), chord_quality::Minor),
-    chord(note(7), chord_quality::Major)
-  };
+  std::vector<note> notes1 = { note("C"), note("E"), note("G") };
+  std::vector<note> notes2 = { note("G"), note("B"), note("D") };
+  std::vector<note> notes3 = { note("B"), note("D"), note("F") };
 
-  chord_progression p1(vec_chords);
+  chord c1(note("C"), notes1.begin(), notes1.end());
+  chord c2(note("G"), notes2.begin(), notes2.end());
+  chord c3(note("B"), notes3.begin(), notes3.end());
 
-  std::array<chord,3> arr_chords = 
-  {
-    chord(note(11), chord_quality::Major),
-    chord(note(6), chord_quality::Augmented),
-    chord(note(1), chord_quality::Minor)
-  };*/
-  
-  //c/*hord_progression p2(arr_chords);
+  std::array<chord,3> vec_chords = { c1, c2, c3 };
+  chord_progression progression(vec_chords.begin(), vec_chords.end());
+  std::cout << "Chord Progression:\n" << progression << "\n";
 
-  //auto voicing = generate_voicings(p2, 4);
-  //for (const auto& chord_voicing : voicing)
-  //{
-  //    for (const auto& p : chord_voicing)
-  //    {
-  //        std::cout << p << " ";
-  //    }
-  //    std::cout << "\n";
-  //}*/
+ auto voicing = generate_voicings(progression, 4);
 
-  // -----Test pitch-----
-  pitch middle_c{60};
-  pitch a4(69);
+ for (const auto& chord_voicing : voicing)
+ {
+     for (const auto& p : chord_voicing)
+     {
+         std::cout << p << " ";
+     }
+     std::cout << "\n";
+ }
 
-  std::cout <<"Middle C: MIDI note: " << middle_c.get_midi()
-            <<", Frequency: " <<middle_c.get_frequency().get_hz() << ".Hz,"
-            <<" Scientific Notation: " << name(middle_c) << std::endl;
-
-  std::cout <<"A4: MIDI note: " << a4.get_midi()
-            <<", Frequency: " <<a4.get_frequency().get_hz() << ".Hz,"
-            <<" Scientific Notation: " << name(a4) << std::endl;
-
-  std::cout << "Interval (A4 - C4): " << (a4 - middle_c) << " semitones"<< std::endl;
-  std::cout << "Octave equivalent? "
-            << is_octave_equivalent(a4, middle_c) << std::endl;
-
-  // ---- Test frequency ----
-  frequency f1(440.0);
-  frequency f2(880.0);
-
-  std::cout << "Frequencies: f1 = " << f1.get_hz() << " Hz, f2 = " << f2.get_hz() << " Hz" << std::endl;
-  std::cout << "Are they octave equivalent? "
-            << std::boolalpha <<is_octave_equivalent(f1, f2) << std::endl;
-
-  // ---- Test note ----
-  note n1(0); 
-  note n2 = n1 + 12;  // transpose by one otcave
-
-  std::cout << n1 << "\n" << n2 << std::endl;
-
-  
-  std::cout << "Interval (n2 - n1): " << interval_in_semitones(n2, n1) << " semitones"<< std::endl;;
-  std::cout << "Are n1 and n2 octave equivalent? "
-            << std::boolalpha << is_octave_equivalent(n1, n2) << std::endl;;
-
-  // -------------------------------------------
-
-
-  std::cout << "---- Default construction ----\n";
-  string a; // default ctor
-
-  std::cout << "---- Non-default construction ----\n";
-  string b("hello"); // non-default ctor
-  string b2{"hello"};  
-  string b3 = string("hello");  
-  string b4 = string{"hello"};
-
-
-  std::cout << "---- Copy construction ----\n";
-  string c = a; // copy ctor
-
-  std::cout << "---- Copy assignment ----\n";
-  a = b; // copy assignment
-
-  std::cout << "---- Pass by value ----\n";
-  takeByReference(b); // copy ctor (to make parameter x)
-
-  std::cout << "---- Return by value ----\n";
-  string d = makeString(); // copy ctor
-
-  std::cout << "---- End of main ----\n";
   return 0;
 }
 

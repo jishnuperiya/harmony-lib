@@ -10,8 +10,11 @@
 //****************************************************************************
 
 #pragma once
-#include "progression.hpp" //for harmony::chord_progression
-#include <vector> //for std::vector
+#include "progression.hpp"       //for harmony::chord_progression
+#include <vector>                //for std::vector
+
+//****************************************************************************
+
 namespace harmony
 {
 std::vector<std::vector<pitch>> generate_voicings(const chord_progression& progression, int octave_start = 4)
