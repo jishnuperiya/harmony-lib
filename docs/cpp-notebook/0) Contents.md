@@ -1,0 +1,27 @@
+A long-term reference of everything learned through mentorship + practice.
+
+# 📘 Contents
+
+- [1) task1-value-type-experiment.md](1%29%20task1-value-type-experiment.md)
+- [2) cppcon-back2basics-special-member-functions.md](2%29%20cppcon-back2basics-special-member-functions.md)
+- [3) mentorship-notes-class-design-ideas.md](3%29%20mentorship-notes-class-design-ideas.md)
+- [4) mentorship-task2-minimal-complex-type.md](4%29%20mentorship-task2-minimal-complex-type.md)
+- [5) learnings-from-compiler-errors.md](5%29%20learnings-from-compiler-errors.md)
+- [6) Mentor session 02.10.2025 notes.md](6%29%20Mentor%20session%2002.10.2025%20notes.md)
+- [7) mentorship-task3-implementing-a-user-defined-streambuf.md](7%29%20mentorship-task3-implementing-a-user-defined-streambuf.md)
+- [8) Mentor session 10.10.2025 notes.md](8%29%20Mentor%20session%2010.10.2025%20notes.md)
+- [9) taks-basics.md](9%29%20taks-basics.md)
+- [10) Pitch Class Design.md](10%29%20Pitch%20Class%20Design.md)
+- [11) Frequency Class Design.md](11%29%20Frequency%20Class%20Design.md)
+- [12) miscellaneous lessons.md](12%29%20miscellaneous%20lessons.md)
+- [13) Learnings from PR.md](13%29%20Learnings%20from%20PR.md)
+- [14) Mentor session 23.10.2025.md](14%29%20Mentor%20session%2023.10.2025.md)
+- [15) ostream basics from meeting notes.md](15%29%20ostream%20basics%20from%20meeting%20notes.md)
+- [16) Miscellaneous - handle in c++.md](16%29%20Miscellaneous%20-%20handle%20in%20c++.md)
+- [17) mentorship-task5-experimenting-ostream-class-using-streambuf.md](17%29%20mentorship-task5-%20experimenting%20ostream%20class%20us....md)
+- [18) Mentor Session 30.10.2025.md](18%29%20Mentor%20Session%2030.10.2025.md)
+- [19) Mentor Session 06.11.2025.md](19%29%20Mentor%20Session%2006.11.2025.md)
+- [20) Mentor Session 11.11.2025.md](20%29%20Mentor%20Session%2011.11.2025.md)
+- [21) Mentorship Task5 - Implementing Chord, ChordProgression.md](21%29%20Mentorship%20Task5-%20Implementing%20Chord,%20ChordProgression.md)
+- [22) Next Learning Topics.md](22%29%20Next%20Learning%20Topics.md)
+- [23) Mentor Session 25.11.2025.md](23%29%20Mentor%20Session%2025.11.2025.md)
