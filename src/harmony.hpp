@@ -103,6 +103,7 @@ namespace harmony {
 
   note          operator+(note n, int semitones);
   bool          operator<(note lhs, note rhs);
+  bool 		    operator==(note lhs, note rhs); 
   int           interval_in_semitones( note lhs,  note rhs);
   bool          is_octave_equivalent( note lhs,  note rhs);
   std::ostream& operator<<(std::ostream& os, note n);

@@ -20,67 +20,74 @@ namespace harmony
 {
 	class note_set
 	{
-	public:
-	  using iterator = std::set<note>::iterator;
-	  using const_iterator = std::set<note>::const_iterator;
-
-	  note_set() = default;
-		
-	  template <typename InputIt>
-	  note_set(InputIt b, InputIt e)
-		: notes_(b,e){}
-
-	  std::pair<iterator, bool> insert(const note& n)
-	  {
-	    return notes_.insert(n);
-	  }
-
-	  std::size_t erase(const note& n)
-	  {
-	    return notes_.erase(n);
-	  }
-
-	  iterator find(const note& n)
-	  {
-        return notes_.find(n);
-	  }
-
-	  bool  contains(const note& n)
-	  {
-		return notes_.contains(n);
-   	  }
-	  
-	  iterator begin()
-	  {
-		return notes_.begin();
-	  }
-
-	  const_iterator begin() const
-	  {
-		return notes_.begin();
-   	  }
-
-	  const_iterator cbegin() noexcept
-	  {
-		return notes_.cbegin();
-	  }
-
-	  iterator end()
-	  {
-		  return notes_.end();
-	  }
-
-	  const_iterator end() const
-	  {
-		return notes_.end();
-	  }
-
-	  const_iterator cend() noexcept
-	  {
-		return notes_.cend();
-	  }
-	
 	private:
-	  std::set<note> notes_;
+		std::set<note> notes_;
+	public:
+		using iterator = std::set<note>::iterator;//prob returning const iterator
+		using const_iterator = std::set<note>::const_iterator;
+
+		note_set() = default;
+
+		template <typename InputIt>
+		note_set(InputIt b, InputIt e)
+			: notes_(b, e) {
+		}
+
+		std::pair<iterator, bool> insert(const note& n)
+		{
+			return notes_.insert(n);
+		}
+
+		std::size_t erase(const note& n)
+		{
+			return notes_.erase(n);
+		}
+
+		iterator find(const note& n) const
+		{
+			return notes_.find(n);
+		}
+
+		bool  contains(const note& n) 
+		{
+			return notes_.contains(n);
+		}
+
+		std::size_t size() const
+		{
+			return notes_.size();
+		}
+
+		iterator begin()
+		{
+			return notes_.begin();
+		}
+
+		const_iterator begin() const
+		{
+			return notes_.begin();
+		}
+
+		const_iterator cbegin() noexcept
+		{
+			return notes_.cbegin();
+		}
+
+		iterator end()
+		{
+			return notes_.end();
+		}
+
+		const_iterator end() const
+		{
+			return notes_.end();
+		}
+
+		const_iterator cend() noexcept
+		{
+			return notes_.cend();
+		}
+
+	
 	};
 }

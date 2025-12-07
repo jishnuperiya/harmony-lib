@@ -31,11 +31,12 @@ int main(int, const char* [])
 	note_set ns1(notes.begin(), notes.end());
 
 	ns1.insert(note("G"));
-
+	
+	/*
 	for (const auto& n : ns1)
 	{
 		std::cout << n << std::endl;
-	}
+	}*/
   return 0;
 }
 

@@ -80,6 +80,11 @@ namespace {
     return lhs.value() < rhs.value();
   }
 
+  bool operator==(note lhs, note rhs)
+  {
+    return lhs.value() == rhs.value();
+  }
+
   int interval_in_semitones(note lhs, note rhs)
   {
     return ((int)lhs.value() - (int)rhs.value() + 12) % 12;

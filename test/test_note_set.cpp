@@ -17,14 +17,63 @@
 #include <algorithm>								     // for std::set_intersection, std::set_union
 #include <vector>									     // for std::vector
 #include <doctest/doctest.h>                             // for doctest
+#include <rapidcheck.h>                                 
 #include "harmony.hpp"								     // for harmony::note
 #include "note_set.hpp"                                  // for harmony::note_set
 //****************************************************************************
 
 using namespace harmony;
 
+//bool foo(int x)
+//{
+//	RC_ASSERT(x %2 == 0);
+//    return x %2 == 0;
+//}
+//struct bar
+//{
+//	bar(double y = 0) : y_(y) {}
+//    bool operator()(int x) const
+//    {
+//		RC_ASSERT(y_ >= 0);
+//        RC_ASSERT(x % 2 == 0);
+//        return x % 2 == 0;
+//    }
+//
+//	double y_;
+//};
+//int add(int a, int b)
+//{
+//    return a + b;
+//}
+//struct adder
+//{
+//	adder(int offset) : offset_(offset) {}
+//    int operator()(int a) const
+//    {
+//        return a + offset_;
+//    }
+//
+//	int offset_;
+//};
+//const adder add5(5);
+//// add and adder isomorphic
+//
+//const IsEven i;
+//bool b = i(17); // i.operator()(17)
 
-TEST_CASE("basic operations")
+template<>
+struct rc::Arbitrary<harmony::note> {
+    static rc::Gen<harmony::note> arbitrary() {
+        // Generate a random note value between 0 and 11
+        auto g = rc::gen::inRange<std::uint8_t>(0, 12);
+		auto h = rc::gen::construct<harmony::note>(g);
+		return h;
+
+    }
+};
+
+
+TEST_CASE("note_set: basic operations")
 {
 
    /* using notes_t = std::set<note>;*/
@@ -34,8 +83,16 @@ TEST_CASE("basic operations")
     notes_t c_major(notes.begin(), notes.end());
 
     SUBCASE("insert") {
-        c_major.insert(note("B"));
-        CHECK(c_major.contains(note("B")));
+        rc::check("name", 
+            [](note n) 
+			{ 
+                auto notes = notes_t();
+                notes.insert(n);
+				RC_ASSERT(notes.contains(n));
+                RC_ASSERT(notes.size() == 1);
+                RC_ASSERT(*notes.find(n) == n);
+            });
+       
     }
 
     SUBCASE("erase") {

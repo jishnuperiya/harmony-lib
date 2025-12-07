@@ -49,7 +49,7 @@ add_library(harmony-lib STATIC
   src/note.cpp
   src/chord.cpp
   src/progression.cpp
-  src/note_set.cpp)
+  )
 
 target_link_libraries(harmony-lib)
 
