@@ -1,4 +1,4 @@
-
+****
 ### static member functions
 
 - nomral member functions has a this pointer
