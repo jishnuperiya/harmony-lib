@@ -31,7 +31,7 @@ namespace {
     throw std::invalid_argument("Invalid note name");
   }
 }
-  note::note(uint8_t value)
+   note::note(uint8_t value)
     : note_{static_cast<uint8_t>(value % 12)} 
   {}
 

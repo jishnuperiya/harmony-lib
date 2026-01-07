@@ -10,9 +10,13 @@
 //****************************************************************************
 #pragma once
 
-#include<set>									// For std::set
-#include<utility>							    // For std::pair
-#include "harmony.hpp"							// For harmony::note
+#include<set>									     // For std::set
+#include<utility>							     // For std::pair
+#include<bitset>                   // For std::bitset
+#include<cstdint>							     // For uint8_t
+#include<iterator>                 // For std::reverse_iterator
+#include<compare>  						     // For operator<=>
+#include "harmony.hpp"						 // For harmony::note
 
 //****************************************************************************
 
@@ -20,74 +24,203 @@ namespace harmony
 {
 	class note_set
 	{
-	private:
-		std::set<note> notes_;
 	public:
-		using iterator = std::set<note>::iterator;//prob returning const iterator
-		using const_iterator = std::set<note>::const_iterator;
+		class iterator;
+    using reverse_iterator = std::reverse_iterator<iterator>;
 
-		note_set() = default;
+	  constexpr note_set() noexcept
+		: notes_{0} {}
 
-		template <typename InputIt>
-		note_set(InputIt b, InputIt e)
-			: notes_(b, e) {
-		}
+	  template<typename InputIt>
+	  note_set(InputIt first, InputIt last) noexcept
+		: notes_ {0}
+	  {
+		  for ( ; first != last ; ++first)
+		  {
+	      insert(*first);
+	 	  }
+	  }
 
-		std::pair<iterator, bool> insert(const note& n)
+	  note_set(const std::initializer_list<note>& notes) noexcept
+		  : note_set{ notes.begin(),notes.end() } {}
+
+	  constexpr note_set(const note_set&) noexcept = default;
+	  constexpr note_set& operator=(const note_set&) noexcept = default;
+	  constexpr note_set(note_set&&) = default;
+	  constexpr note_set& operator=(note_set&&) noexcept = default;
+
+	  [[nodiscard]] constexpr size_t size() const noexcept
+	  {
+		  return notes_.count();
+	  }
+
+	  [[nodiscard]] constexpr bool contains(note n) const noexcept
+	  {
+		  return notes_.test(n.value());
+	  }
+
+	  note_set& insert(note n) noexcept
+	  {
+		  notes_.set(n.value(), true);
+		  return *this;
+	  }
+
+	  [[nodiscard]] constexpr bool operator==(const note_set& other) const noexcept
+	  {
+		  return this->notes_ == other.notes_;
+	  }
+
+	  [[nodiscard]] constexpr bool operator!=(const note_set& other) const noexcept
+	  {
+		  return this->notes_ != other.notes_;
+	  }
+
+	  constexpr note_set& clear() noexcept
+	  {
+		  notes_.reset();
+		  return *this;
+	  }
+
+	  constexpr note_set& remove(const note& n) noexcept
+	  {
+		  notes_.reset(n.value());
+		  return *this;
+	  }
+
+	  [[nodiscard ]] constexpr note_set& operator|=(const note_set& other) noexcept
+	  {
+		  this->notes_ |= other.notes_;
+		  return *this;
+	  }
+
+	  [[nodiscard]] constexpr note_set& operator&=(const note_set& other) noexcept
+	  {
+		  this->notes_ &= other.notes_;
+		  return *this;
+	  }
+
+		[[nodiscard]] iterator begin() const noexcept
 		{
-			return notes_.insert(n);
+			return iterator(&notes_, 0);
 		}
 
-		std::size_t erase(const note& n)
+		[[nodiscard]] iterator end() const noexcept
 		{
-			return notes_.erase(n);
+			return iterator(&notes_, 12);
 		}
 
-		iterator find(const note& n) const
+		[[nodiscard]] reverse_iterator rbegin() const noexcept
 		{
-			return notes_.find(n);
+			return reverse_iterator(end());
 		}
 
-		bool  contains(const note& n) 
+		[[nodiscard]] reverse_iterator rend() const noexcept
 		{
-			return notes_.contains(n);
+			return reverse_iterator(begin());
 		}
 
-		std::size_t size() const
-		{
-			return notes_.size();
-		}
+	  class iterator
+	  {
+	  public:
+		  using iterator_category = std::bidirectional_iterator_tag;
+		  using value_type = note;
+		  using difference_type = std::ptrdiff_t;
+		  using pointer = void;  
+		  using reference = note;
 
-		iterator begin()
-		{
-			return notes_.begin();
-		}
+		  struct arrow_proxy 
+			{
+			  note n;
 
-		const_iterator begin() const
-		{
-			return notes_.begin();
-		}
+			  [[nodiscard]] constexpr const note* operator->() const noexcept 
+			  { 
+				  return &n; 
+			  }
+		  };
 
-		const_iterator cbegin() noexcept
-		{
-			return notes_.cbegin();
-		}
+		  iterator() noexcept
+			: bits_{ nullptr }, index_{ 12 } 
+			{
+			}
+		  iterator(const std::bitset<12>* bits, std::size_t index) noexcept
+			: bits_{ bits }, index_{ index }
+		  {
+			  advance();
+		  }
 
-		iterator end()
-		{
-			return notes_.end();
-		}
+		  [[nodiscard]] reference operator*() const noexcept
+		  {
+			  return note{ static_cast<uint8_t>(index_) };
+		  }
 
-		const_iterator end() const
-		{
-			return notes_.end();
-		}
+		  [[nodiscard]] arrow_proxy operator->() const noexcept
+		  {
+			  return arrow_proxy{ **this };
+		  }
 
-		const_iterator cend() noexcept
-		{
-			return notes_.cend();
-		}
+		  iterator& operator++() noexcept
+		  {
+			  ++index_;
+			  advance();
+			  return *this;
+		  }
 
-	
+			
+		  iterator operator++(int) noexcept
+		  {
+			  iterator temp = *this;
+			  ++(*this);
+			  return temp;
+		  }
+
+		  iterator& operator--() noexcept
+			{
+				--index_;
+				retreat(); 
+				return *this;
+			}
+
+		  iterator operator--(int) noexcept
+			{
+				iterator temp = *this;
+				--(*this);
+				return temp;
+			}
+
+		  [[nodiscard]] constexpr auto operator<=>(const iterator& other) const noexcept = default;
+
+		 
+	  private:
+      void advance() noexcept
+		  {
+		    while (index_ < 12 && bits_ && !bits_->test(index_))
+		    {
+			    ++index_;
+	      }
+		  }
+		  void retreat() noexcept
+		  {
+			  while (index_ > 0 && bits_ && !bits_->test(index_))
+			  {
+				  --index_;
+			  }
+		  }
+		  const std::bitset<12>* bits_;
+		  std::size_t index_;
+	  };
+
+	private:
+	  std::bitset<12> notes_;
 	};
+
+	[[nodiscard]] constexpr note_set operator|(note_set lhs, const note_set& rhs) noexcept
+	{
+    return lhs|= rhs;
+	}
+
+	[[nodiscard]] constexpr note_set operator&(note_set lhs, const note_set& rhs) noexcept
+	{
+		return lhs &= rhs;
+	}
+
 }

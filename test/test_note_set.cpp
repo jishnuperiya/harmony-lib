@@ -24,42 +24,6 @@
 
 using namespace harmony;
 
-//bool foo(int x)
-//{
-//	RC_ASSERT(x %2 == 0);
-//    return x %2 == 0;
-//}
-//struct bar
-//{
-//	bar(double y = 0) : y_(y) {}
-//    bool operator()(int x) const
-//    {
-//		RC_ASSERT(y_ >= 0);
-//        RC_ASSERT(x % 2 == 0);
-//        return x % 2 == 0;
-//    }
-//
-//	double y_;
-//};
-//int add(int a, int b)
-//{
-//    return a + b;
-//}
-//struct adder
-//{
-//	adder(int offset) : offset_(offset) {}
-//    int operator()(int a) const
-//    {
-//        return a + offset_;
-//    }
-//
-//	int offset_;
-//};
-//const adder add5(5);
-//// add and adder isomorphic
-//
-//const IsEven i;
-//bool b = i(17); // i.operator()(17)
 
 template<>
 struct rc::Arbitrary<harmony::note> {
@@ -72,85 +36,266 @@ struct rc::Arbitrary<harmony::note> {
     }
 };
 
-
-TEST_CASE("note_set: basic operations")
+TEST_CASE("note_set: default constructor")
 {
-
-   /* using notes_t = std::set<note>;*/
-    using notes_t = harmony::note_set;
-
-    std::vector<note> notes = { note("C"), note("E") , note("G") };
-    notes_t c_major(notes.begin(), notes.end());
-
-    SUBCASE("insert") {
-        rc::check("name", 
-            [](note n) 
-			{ 
-                auto notes = notes_t();
-                notes.insert(n);
-				RC_ASSERT(notes.contains(n));
-                RC_ASSERT(notes.size() == 1);
-                RC_ASSERT(*notes.find(n) == n);
-            });
-       
-    }
-
-    SUBCASE("erase") {
-        c_major.insert(note("B"));
-        c_major.erase(note("B"));
-        CHECK(!c_major.contains(note("B")));
-    }
-
-    SUBCASE("contains and find") {
-        CHECK(c_major.contains(note("C")));
-        CHECK(c_major.find(note("C")) != c_major.end());
-        CHECK(!c_major.contains(note("A")));
-    }
-
-    SUBCASE("iteration") {
-        std::vector<std::string> collected;
-        for (auto& n : c_major) {
-            collected.push_back(n.name());
-        }
-
-        CHECK(collected.size() == 3);
-        CHECK(collected[0] == "C");
-        CHECK(collected[1] == "E");
-        CHECK(collected[2] == "G");
-    }
+    rc::check("default note_set is always empty",
+        [](note n)
+        {
+            harmony::note_set ns;
+            RC_ASSERT(ns.size() == 0);
+            RC_ASSERT(ns.contains(n) == false);
+        });
 }
 
-TEST_CASE("set algorithms on notes_t") {
-    using notes_t = std::set<note>;
+TEST_CASE("note_set: copy and move")
+{
+    rc::check("copying note_set results in identical set",
+        [](const std::vector<note>& notes)
+        {
+            harmony::note_set original;
+            for (auto n : notes) original.insert(n);
 
-    notes_t c_major = { note("C"), note("E"), note("G") };
-    notes_t minor = { note("A"), note("C"), note("E") };
+            harmony::note_set copy = original;
 
-    SUBCASE("intersection") {
-        notes_t inter;
-        std::set_intersection(
-            c_major.begin(), c_major.end(),
-            minor.begin(), minor.end(),
-            std::inserter(inter, inter.begin())
-        );
-
-        CHECK(inter.size() == 2);
-        CHECK(inter.contains(note("C")));
-        CHECK(inter.contains(note("E")));
-    }
-
-    SUBCASE("union") {
-        notes_t uni;
-        std::set_union(
-            c_major.begin(), c_major.end(),
-            minor.begin(), minor.end(),
-            std::inserter(uni, uni.begin())
-        );
-
-        CHECK(uni.size() == 4);
-        CHECK(uni.contains(note("A")));
-        CHECK(uni.contains(note("C")));
-        CHECK(uni.contains(note("E")));
-        CHECK(uni.contains(note("G")));
-    }
+            RC_ASSERT(copy.size() == original.size());
+            for (auto n : notes)
+            {
+                RC_ASSERT(original.contains(n) == copy.contains(n));
+            }
+        });
 }
+
+TEST_CASE("note_set: insert method")
+{
+    rc::check("inserting notes behaves like a mathemcatical set",
+        [](const std::vector<harmony::note>& notes)
+        {
+            harmony::note_set ns;
+            std::set<uint8_t> ground_truth_set;
+
+            for (auto n : notes)
+            {
+                ns.insert(n);
+                ground_truth_set.insert(n.value());
+
+                RC_ASSERT(ns.contains(n));
+            }
+
+            RC_ASSERT(ns.size() == ground_truth_set.size());
+
+            for (uint8_t i = 0; i < 12; i++)
+            {
+                bool should_be_there = (ground_truth_set.find(i) != ground_truth_set.end());
+                RC_ASSERT(ns.contains(harmony::note{ i }) == should_be_there);
+            }
+
+        });
+}
+
+TEST_CASE("note_set: insert chaining")
+{
+    harmony::note_set ns;
+    note c{ 0 }, e{ 4 }, g{ 7 };
+
+    ns.insert(c).insert(e).insert(g);
+
+    CHECK(ns.size() == 3);
+    CHECK((ns.contains(c) && ns.contains(e) && ns.contains(g)));
+}
+
+TEST_CASE("note_set: contains contract")
+{
+    rc::check("contains only retunrs true for notes actually present",
+        [](const harmony::note& n)
+        {
+            harmony::note_set ns;
+            RC_ASSERT(!ns.contains(n));
+
+            ns.insert(n);
+            RC_ASSERT(ns.contains(n));
+        });
+}
+
+TEST_CASE("note_set: size consistency")
+{
+    rc::check("size matches number of unique notes",
+        [](const std::vector<harmony::note>& notes)
+        {
+            harmony::note_set ns;
+            RC_ASSERT(ns.size() == 0);
+            std::set<uint8_t> ground_truth_note_set;
+            for (auto n : notes)
+            {
+                ns.insert(n);
+                ground_truth_note_set.insert(n.value());
+            }
+            RC_ASSERT(ns.size() == ground_truth_note_set.size());
+        });
+}
+
+TEST_CASE("note_set: range based constructor matches manual insertion")
+{
+    rc::check("sequence of notes results in same set either done by manual insertion or range based construction",
+        [](const std::vector<harmony::note>& notes)
+        {
+            harmony::note_set set_from_range(notes.begin(), notes.end());
+
+            harmony::note_set set_manual;
+            for (auto n : notes)
+            {
+                set_manual.insert(n);
+            }
+            RC_ASSERT(set_from_range == set_manual);
+        });
+}
+
+TEST_CASE("note_set: initializer list constructor matches manual insertion")
+{
+    rc::check("sequence of notes results in same set either done by manual insertion or initilzer list based construction",
+        [](const note& n1, const note& n2, const note& n3)
+        {
+            harmony::note_set set_from_intializer_list{ n1, n2, n3 };
+            harmony::note_set set_manual;
+            set_manual.insert(n1).insert(n2).insert(n3);
+            
+            RC_ASSERT(set_from_intializer_list == set_manual);
+        });
+}
+
+TEST_CASE("note_set: clear method contract") {
+    rc::check("clearing a set always results in size 0",
+        [](const std::vector<harmony::note>& notes) {
+            harmony::note_set ns(notes.begin(), notes.end());
+
+            ns.clear(); 
+            RC_ASSERT(ns.size() == 0);
+
+            for (auto n : notes)
+            {
+                RC_ASSERT(!ns.contains(n));
+            }
+        });
+}
+
+TEST_CASE("note_set: union operator|")
+{
+    rc::check("union contains notes present in either source set",
+        [](const std::vector<harmony::note>& v1, const std::vector<harmony::note>& v2)
+        {
+            harmony::note_set ns1(v1.begin(), v1.end());
+            harmony::note_set ns2(v2.begin(), v2.end());
+
+
+            harmony::note_set result = ns1 | ns2;
+
+            for (uint8_t i = 0; i < 12; ++i)
+            {
+                harmony::note n{i};
+                bool in_first = ns1.contains(n);
+                bool in_second = ns2.contains(n);
+
+                RC_ASSERT(result.contains(n) == (in_first || in_second));
+            }
+        });
+}
+
+TEST_CASE("note_set: operator|= consistency")
+{
+    rc::check("a |= b results in the same state as a | b",
+        [](const std::vector<harmony::note>& v1, const std::vector<harmony::note>& v2)
+        {
+            harmony::note_set a(v1.begin(), v1.end());
+            harmony::note_set b(v2.begin(), v2.end());
+
+            harmony::note_set expected = a | b;
+
+            harmony::note_set& result_ref = (a |= b);
+
+            RC_ASSERT(a == expected);           
+            RC_ASSERT(&result_ref == &a);     
+        });
+}
+
+
+TEST_CASE("note_set: intersection operator&")
+{
+    rc::check("intersection contains only notes present in both source sets",
+        [](const std::vector<harmony::note>& v1, const std::vector<harmony::note>& v2)
+        {
+            harmony::note_set ns1(v1.begin(), v1.end());
+            harmony::note_set ns2(v2.begin(), v2.end());
+            harmony::note_set result = ns1 & ns2;
+            for (uint8_t i = 0; i < 12; ++i)
+            {
+                harmony::note n{i};
+                bool in_first = ns1.contains(n);
+                bool in_second = ns2.contains(n);
+                RC_ASSERT(result.contains(n) == (in_first && in_second));
+            }
+        });
+}
+
+TEST_CASE("note_set: operator&= consistency")
+{
+    rc::check("a &= b results in the same state as a & b",
+        [](const std::vector<harmony::note>& v1, const std::vector<harmony::note>& v2)
+        {
+            harmony::note_set a(v1.begin(), v1.end());
+            harmony::note_set b(v2.begin(), v2.end());
+
+            harmony::note_set expected = a & b;
+
+            harmony::note_set& result_ref = (a &= b);
+
+            RC_ASSERT(a == expected);
+            RC_ASSERT(&result_ref == &a);
+        });
+}
+
+
+TEST_CASE("note_set: inequality operator!=")
+{
+    rc::check("inequality operator behaves as expected",
+        [](const std::vector<harmony::note>& v1, const std::vector<harmony::note>& v2)
+        {
+            harmony::note_set ns1(v1.begin(), v1.end());
+            harmony::note_set ns2(v2.begin(), v2.end());
+            bool sets_are_equal = (ns1 == ns2);
+            RC_ASSERT((ns1 != ns2) == !sets_are_equal);
+        });
+}
+
+TEST_CASE("note_set: equality operator==")
+{
+    rc::check("equality operator behaves as expected",
+        [](const std::vector<harmony::note>& v1, const std::vector<harmony::note>& v2)
+        {
+            harmony::note_set ns1(v1.begin(), v1.end());
+            harmony::note_set ns2(v2.begin(), v2.end());
+            std::set<uint8_t> set1, set2;
+            for (auto n : v1) set1.insert(n.value());
+            for (auto n : v2) set2.insert(n.value());
+            bool sets_are_equal = (set1 == set2);
+            RC_ASSERT((ns1 == ns2) == sets_are_equal);
+        });
+}
+
+TEST_CASE("note_set: iterator visits all inserted notes")
+{
+  rc::check("iterator reaches every note exactly once",
+    [](const std::vector<harmony::note>& notes)
+    {
+      harmony::note_set ns(notes.begin(), notes.end());
+      std::set<uint8_t> ground_truth;
+      for (auto n : notes) ground_truth.insert(n.value());
+
+      std::set<uint8_t> observed;
+      for (auto it = ns.begin(); it != ns.end(); ++it)
+      {
+        observed.insert(it->value()); 
+      }
+
+      RC_ASSERT(observed == ground_truth);
+    });
+}
+

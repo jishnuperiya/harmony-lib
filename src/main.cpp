@@ -26,17 +26,8 @@ int main(int, const char* [])
 {
 	using namespace harmony;
 
-	std::vector<note> notes = { note("C"), note("E") };
-
-	note_set ns1(notes.begin(), notes.end());
-
-	ns1.insert(note("G"));
+	note_set ns2{};
 	
-	/*
-	for (const auto& n : ns1)
-	{
-		std::cout << n << std::endl;
-	}*/
   return 0;
 }
 
