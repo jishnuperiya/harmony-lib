@@ -48,7 +48,8 @@ add_library(harmony-lib STATIC
   src/frequency.cpp
   src/note.cpp
   src/chord.cpp
-  src/progression.cpp)
+  src/progression.cpp
+  )
 
 target_link_libraries(harmony-lib)
 
@@ -73,7 +74,9 @@ add_executable(harmony-test
   test/test_note.cpp
   test/test_chord.cpp
   test/test_progression.cpp
-  test/test_voicing.cpp)
+  test/test_voicing.cpp
+  test/test_note_set.cpp)
+
 
 if(TARGET rapidcheck)
   if(MSVC)
