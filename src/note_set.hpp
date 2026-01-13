@@ -28,6 +28,8 @@ namespace harmony
 		class iterator;
     using reverse_iterator = std::reverse_iterator<iterator>;
 
+    using size_type = std::size_t;
+
 	  constexpr note_set() noexcept
 		: notes_{0} {}
 
@@ -70,10 +72,7 @@ namespace harmony
 		  return this->notes_ == other.notes_;
 	  }
 
-	  [[nodiscard]] constexpr bool operator!=(const note_set& other) const noexcept
-	  {
-		  return this->notes_ != other.notes_;
-	  }
+    [[nodiscard]] constexpr bool operator!=(const note_set& other) const noexcept = default;
 
 	  constexpr note_set& clear() noexcept
 	  {
@@ -98,6 +97,8 @@ namespace harmony
 		  this->notes_ &= other.notes_;
 		  return *this;
 	  }
+    // ^=,  +=, -= can be added later as needed
+
 
 		[[nodiscard]] iterator begin() const noexcept
 		{
@@ -128,7 +129,7 @@ namespace harmony
 		  using pointer = void;  
 		  using reference = note;
 
-		  struct arrow_proxy 
+		  struct pointer 
 			{
 			  note n;
 
@@ -142,6 +143,7 @@ namespace harmony
 			: bits_{ nullptr }, index_{ 12 } 
 			{
 			}
+
 		  iterator(const std::bitset<12>* bits, std::size_t index) noexcept
 			: bits_{ bits }, index_{ index }
 		  {
@@ -153,9 +155,9 @@ namespace harmony
 			  return note{ static_cast<uint8_t>(index_) };
 		  }
 
-		  [[nodiscard]] arrow_proxy operator->() const noexcept
+		  [[nodiscard]] pointer operator->() const noexcept
 		  {
-			  return arrow_proxy{ **this };
+			  return pointer{ **this };
 		  }
 
 		  iterator& operator++() noexcept
@@ -164,7 +166,6 @@ namespace harmony
 			  advance();
 			  return *this;
 		  }
-
 			
 		  iterator operator++(int) noexcept
 		  {

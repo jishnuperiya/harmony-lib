@@ -36,12 +36,26 @@ struct rc::Arbitrary<harmony::note> {
     }
 };
 
+template<>
+struct rc::Arbitrary<harmony::note_set>
+{
+  static rc::Gen<harmony::note_set> arbitrary()
+  {
+    auto g = rc::gen::inRange<std::uint8_t>(0, 12);
+    auto h = rc::gen::construct<harmony::note_set>(g);
+    return h;
+
+  }
+};
+
+
 TEST_CASE("note_set: default constructor")
 {
+    const harmony::note_set ns;
     rc::check("default note_set is always empty",
-        [](note n)
+        [&ns](note n)
         {
-            harmony::note_set ns;
+            
             RC_ASSERT(ns.size() == 0);
             RC_ASSERT(ns.contains(n) == false);
         });
