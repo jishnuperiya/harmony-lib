@@ -54,12 +54,12 @@ namespace harmony {
     */
                 pitch(int midi_note = 60);
     
-                /**
+    /**
     * @brief Construct a pitch from a frequency
     */
                 pitch(frequency);
     
-                /** @return MIDI note number */
+    /** @return MIDI note number */
     uint8_t     get_midi()                  const;
     
     /** @return Frequency corresponding to this pitch */
