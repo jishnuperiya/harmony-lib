@@ -1,4 +1,4 @@
-//******** Copyright © 2025 Jishnu Periya, Jonathon Bell. All rights reserved.
+//******** Copyright ï¿½ 2026 Jishnu Periya, Jonathon Bell. All rights reserved.
 //*
 //*
 //*  Version : $Header:$
@@ -9,8 +9,9 @@
 //*
 //****************************************************************************
 
-#pragma once
-#include "progression.hpp"
+#include "progression.hpp"                               // For chord_progression
+
+//****************************************************************************
 
 using namespace harmony;
 
@@ -32,3 +33,5 @@ std::ostream& harmony::operator<<(std::ostream& os, const chord_progression& p)
   }
   return os;
 }
+
+//****************************************************************************
